@@ -7,19 +7,18 @@ dogpark
 {% endblock %}
 
 {% block body_block %}
-    <h1>Register</h1>
-    <div>
+    {% if registered %}
+        <h6>Thank you for registering</h6>
+        <a href="{% url 'dogpark:index'%}"> Return to home </a>
+    {% else %}
+    <h6>Register</h6>
+    <div class="container text-sm-center" id="registeration_form">
         <form id="register_form" method="post" action="{%url 'dogpark:register' %}">
             {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{hidden}}
-            {% endfor %}
-            {% for field in form.visible_fields %}
-                {{field.errors}}
-                {{field.help_text}}
-                {{field}}
-            {% endfor %}
+            {{ user_form.as_p }}
+            <div id="prof"></div>
             <input type="submit" name="submit" value="Register"/>
         </form>
     </div>
+    {% endif %}
 {% endblock %}

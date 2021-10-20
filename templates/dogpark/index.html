@@ -7,16 +7,16 @@ dogpark
 {% endblock %}
 
 {% block body_block %}
-    <h1>Please login or register</h1>
-    <form id="login_form" method="post" action="{%url 'dogpark:login' %}">
-        <div class="form-group">
-            {% csrf_token %}
-            Username: <input type="text" name="username" value="" class="form-control" size="50" placeholder="Enter email"/><br />
-            Password: <input type="password" name="password" value="" class="form-control"size="50" placeholder="Enter password"/><br />
-            <input type="submit" name="submit" value="Login"/>
-        </div>
-    </form>
-        
+    <div class="container text-sm-center" id="contactus">
+        <h1>Please login or register</h1>
+        <form id="login_form" method="post" action="{%url 'dogpark:login' %}">
+            <div class="form-group">
+                {% csrf_token %}
+                Username: <input type="text" name="username" value="" class="form-control" size="50" placeholder="Enter email"/><br />
+                Password: <input type="password" name="password" value="" class="form-control"size="50" placeholder="Enter password"/><br />
+                <input type="submit" name="submit" value="Login"/>
+            </div>
+        </form>
         <p>Want to register?</p>
         <a href="{%url 'dogpark:register' %}">Register</a>
     </div>
