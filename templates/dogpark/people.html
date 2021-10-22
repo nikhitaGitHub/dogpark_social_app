@@ -1,0 +1,21 @@
+{% extends 'dogpark/base.html' %}
+{% load static %}
+{% block title_block %}
+    search people
+{% endblock %}
+
+{% block header_block %}
+{% endblock %}
+
+{% block body_block %}
+        <a href={% url 'dogpark:logout' %}>logout</a>
+        <div class="container" id="people_list">
+        {% for item in user_list %}
+            <div id="u{{forloop.counter0}}">
+                <p>{{item.first_name}} {{item.last_name}}</p>
+                <button id="add_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Add Friend</button>
+                <button id="sent_friend_request{{forloop.counter0}}">Friend Request Sent</button>
+            </div>
+        {% endfor %}
+        </div>
+{% endblock %}

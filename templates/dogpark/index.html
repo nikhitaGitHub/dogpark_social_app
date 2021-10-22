@@ -7,9 +7,21 @@ dogpark
 {% endblock %}
 
 {% block body_block %}
+    {% if user.is_authenticated %}
+    <!--<input type="text" placeholder="Search..">-->
+    <a href="{% url 'dogpark:people' %}">Find people</a>
+    <a href="friends">Friends</a>
+    <a href="my pet">My Pet</a>
+    <a href="my park">My Park</a>
+    <a href="my achievements">My Achievements</a>
+    <img src="{{MEDIA_URL}}placeholder.png">
+    <button>Notifications</button>
+    <button>Settings</button>
+    <a href={% url 'dogpark:logout' %}>logout</a>
+    {% else %}
     <div class="container text-sm-center" id="contactus">
         <h1>Please login or register</h1>
-        <form id="login_form" method="post" action="{%url 'dogpark:login' %}">
+        <form id="login_form" method="post" action="{% url 'dogpark:login' %}">
             <div class="form-group">
                 {% csrf_token %}
                 Username: <input type="text" name="username" value="" class="form-control" size="50" placeholder="Enter email"/><br />
@@ -18,6 +30,7 @@ dogpark
             </div>
         </form>
         <p>Want to register?</p>
-        <a href="{%url 'dogpark:register' %}">Register</a>
+        <a href="{% url 'dogpark:register' %}">Register</a>
     </div>
+    {% endif %}
 {% endblock %}
