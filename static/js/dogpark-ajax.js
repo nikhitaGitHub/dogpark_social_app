@@ -5,33 +5,25 @@ $(document).ready(function() {
     var i;
     
         $("select#id_num_dogs").change(function(){
-            num_dogs = $(':selected').text();
+            num_dogs = $(":selected").text();
+            var elm = $("#prof");
             fetch(url)
             .then(function(response) {
                 return response.json();
             })
             .then(function(data) {
-                for(i = 0; i <num_dogs; i++) {
-                    $("#prof").append(data.form)
+                elm.empty();
+                for(i = 0; i <num_dogs; i=i+1) {
+                    elm.append(data.form);
                 }
             });
-    })
-
-    /*fetch(url)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            for(i = 0; i <num_dogs; i++) {
-                $("#prof").append(data.form);
-            }
         });
-    }*/
+
         function getCookie(name) {
             var cookieValue = null;
-            if(document.cookie && document.cookie != '') {
+            if(document.cookie && document.cookie != "") {
                 var cookies = document.cookie.split(';');
-                for(var i=0; i<cookies.length; i++) {
+                for(i=0; i<cookies.length; i=i+1) {
                     var cookie = jQuery.trim(cookies[i]);
                     if(cookie.substring(0, name.length+1) == (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length+1));
@@ -44,13 +36,13 @@ $(document).ready(function() {
 
         function sendFriendRequest(elm) {
             var csrftoken = getCookie('csrftoken')
-            var url = '/dogpark/send_friend_request/';
-            console.log("Sending request")
+            var url1 = '/dogpark/send_friend_request/';
+            var url2 = '/dogpark/accept_request'
             $('#'+elm.id).click(function() {
                 console.log(uname)
                 var uname = $(this).attr('data-uname');
                 $.ajax({
-                    url: url,
+                    url: url1,
                     type: "POST",
                     data: {
                         csrfmiddlewaretoken: csrftoken,
@@ -58,12 +50,13 @@ $(document).ready(function() {
                     },
                     success: function(json) {
                         if(json.response === 1) {
-                            $('#sent_friend_request'+elm.id.match(/\d+$/)).show();
-                            $(this).hide();
+                            var btn = $(this)
+                            $('#accept_request'+elm.id.match(/\d+$/)).show();
+                            btn.hide();
                         }
                     },
                     error: function(xhr, errmsg, err) {
-                        console.log(xhr.status+": "+xhr.responseText)
+                        console.log(xhr.status+": "+xhr.responseText);
                     }
                 });
             })
@@ -75,4 +68,4 @@ $(document).ready(function() {
                 sendFriendRequest(elm)
             }
         });
-})
+});

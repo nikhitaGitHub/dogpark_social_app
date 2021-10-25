@@ -9,12 +9,11 @@
 
 {% block body_block %}
         <a href={% url 'dogpark:logout' %}>logout</a>
-        <div class="container" id="people_list">
-        {% for item in user_list %}
-            <div id="u{{forloop.counter0}}">
+        <div class="container" id="friend_request_list">
+        {% for item in incoming_requests %}
+            <div id="req{{forloop.counter0}}">
                 <p>{{item.first_name}} {{item.last_name}}</p>
-                <button id="add_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Add Friend</button>
-                <button id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</button>
+                <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Accept Friend</button>
             </div>
         {% endfor %}
         </div>

@@ -1,4 +1,4 @@
-{% extends 'dogpark/baseforms.html' %}
+{% extends 'dogpark/base.html' %}
 
 {% load staticfiles %}
 
@@ -16,7 +16,9 @@ dogpark
         <form id="register_form" method="post" action="{%url 'dogpark:register' %}">
             {% csrf_token %}
             {{ user_form.as_p }}
-            <div id="prof"></div>
+            <div id="prof">
+                {{profile_form.as_p}}
+            </div>
             <input type="submit" name="submit" value="Register"/>
         </form>
     </div>

@@ -22,10 +22,16 @@ class Dog(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     picture = models.ImageField(upload_to="dog_profile_picture", default="", blank=True)
     def __str__(self):
-        return self.name + " is a " + self.breed + " and is " + self.age + " years old."
+        return self.name + " is a " + self.breed + " and is " + str(self.age) + " years old."
     
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='the_sender',on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='the_receiver', on_delete=models.CASCADE)
     def __str__(self):
         return "Friend request sent"
+    
+class Friendship(models.Model):
+    from_friend = models.ForeignKey(User, related_name="from_friend", on_delete=models.CASCADE)
+    to_friend= models.ForeignKey(User, related_name="to_friend", on_delete=models.CASCADE)
+    def __str__(self):
+        return "Friend request accepted"

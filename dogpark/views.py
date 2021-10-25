@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from dogpark.models import Owner, Dog, FriendRequest
+from dogpark.models import Friendship, Owner, Dog, FriendRequest, Friendship
 from dogpark.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user
@@ -12,7 +12,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
 import os
-
 
 # Create your views here.
 def index(request):
@@ -86,16 +85,49 @@ def register(request):
         
     return render(request, 'dogpark/register.html', context=context_dict)
 
+@login_required
 def dashboard():
     pass
 
+@login_required
 def people(request):
     user_list = User.objects.all()
     context_dict = {}
     context_dict['user_list'] = user_list
     return render(request, 'dogpark/people.html', context=context_dict)
 
+class seeFriendRequests(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        context_dict = {}
+        u = get_user(request)
+        try:
+            my_requests = FriendRequest.objects.get(receiver=u)
+        except FriendRequest.DoesNotExist:
+            fr = None
+        if fr == None:
+            return redirect(reverse('dogpark:index'))
+        if my_requests != False:
+            context_dict['incoming_requests'] = my_requests
+        return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
+    
+class myFriends(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        context_dict = {}
+        u = get_user(request)
+        try:
+            friendship = Friendship.objects.get(from_friend=u)
+            friendship.extend(Friendship.objects.get(to_friend=u))
+        except Friendship.DoesNotExist:
+            friendship = None
+        if friendship == None:
+            return redirect(reverse('dogpark:index'))
+        context_dict['friends'] = friendship
+        return render(request,  'dogpark/my_friends.html', context=context_dict)
+         
 class SendFriendRequest(View):
+    @method_decorator(login_required)
     def post(self,request):
         data = {'response' : -1}
         uname = request.POST.get('uname')
@@ -103,8 +135,19 @@ class SendFriendRequest(View):
             sender = get_user(request)
             receiver = User.objects.get(username=uname)
             req = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
-        #except User.DoesNotExist:
-         #   return JsonResponse(data)
+        except ValueError:
+            return JsonResponse(data)
+        return JsonResponse({'response': 1})
+    
+class AcceptRequests(View):
+    @method_decorator(login_required)
+    def post(self,request):
+        data = {'response': -1}
+        uname = request.POST.get('uname')
+        try:
+            from_friend = get_user(request)
+            to_friend = User.objects.get(username=uname)
+            friend = Friendship.objects.get_or_create(from_friend=from_friend, to_friend=to_friend)
         except ValueError:
             return JsonResponse(data)
         return JsonResponse({'response': 1})
