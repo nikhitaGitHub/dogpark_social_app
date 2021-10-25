@@ -6,24 +6,29 @@ $(document).ready(function() {
     
         $("select#id_num_dogs").change(function(){
             num_dogs = $(":selected").text();
+            num_dogs = num_dogs.match(/\d/);
+            num_dogs = parseInt(num_dogs[0]);
             var elm = $("#prof");
+            var content = null;
+
             fetch(url)
             .then(function(response) {
                 return response.json();
             })
             .then(function(data) {
                 elm.empty();
-                for(i = 0; i <num_dogs; i=i+1) {
+                for(i = 0; i < num_dogs; i++) {
                     elm.append(data.form);
                 }
             });
+         
         });
 
         function getCookie(name) {
             var cookieValue = null;
             if(document.cookie && document.cookie != "") {
                 var cookies = document.cookie.split(';');
-                for(i=0; i<cookies.length; i=i+1) {
+                for(i=0; i<cookies.length; i++) {
                     var cookie = jQuery.trim(cookies[i]);
                     if(cookie.substring(0, name.length+1) == (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length+1));
