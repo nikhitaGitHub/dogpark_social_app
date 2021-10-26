@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from dogpark.models import Friendship, Owner, Dog, FriendRequest, Friendship
+from dogpark.models import Friendship, Owner, Dog, FriendRequest
 from dogpark.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user
@@ -91,7 +91,7 @@ def dashboard():
 
 @login_required
 def people(request):
-    user_list = User.objects.all()
+    user_list = User.objects.exclude(username=get_user(request))
     context_dict = {}
     context_dict['user_list'] = user_list
     return render(request, 'dogpark/people.html', context=context_dict)
@@ -100,16 +100,22 @@ class seeFriendRequests(View):
     @method_decorator(login_required)
     def get(self, request):
         context_dict = {}
+        print("Inside funtion")
+        my_requests = False
+        fr = True
         u = get_user(request)
-        try:
-            my_requests = FriendRequest.objects.get(receiver=u)
-        except FriendRequest.DoesNotExist:
-            fr = None
-        if fr == None:
-            return redirect(reverse('dogpark:index'))
-        if my_requests != False:
+        if not request.user.is_anonymous:
+            print("USer is not anonymous")
+            try:
+                my_requests = FriendRequest.objects.get(receiver=request.user)
+                #my_requests = FriendRequest.objects.all().filter(receiver=request.user)
+            except FriendRequest.DoesNotExist:
+                fr = None
+            if fr == None:
+                print("redirecting to homepage")
+                return redirect(reverse('dogpark:index'))
             context_dict['incoming_requests'] = my_requests
-        return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
+            return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
     
 class myFriends(View):
     @method_decorator(login_required)
@@ -134,7 +140,7 @@ class SendFriendRequest(View):
         try:
             sender = get_user(request)
             receiver = User.objects.get(username=uname)
-            req = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
+            req_obj, created = FriendRequest.objects.get_or_create(sender=sender, receiver=receiver)
         except ValueError:
             return JsonResponse(data)
         return JsonResponse({'response': 1})

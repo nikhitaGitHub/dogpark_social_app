@@ -44,7 +44,6 @@ $(document).ready(function() {
             var url1 = '/dogpark/send_friend_request/';
             var url2 = '/dogpark/accept_request'
             $('#'+elm.id).click(function() {
-                console.log(uname)
                 var uname = $(this).attr('data-uname');
                 $.ajax({
                     url: url1,
@@ -54,10 +53,9 @@ $(document).ready(function() {
                         uname: uname
                     },
                     success: function(json) {
-                        if(json.response === 1) {
-                            var btn = $(this)
-                            $('#accept_request'+elm.id.match(/\d+$/)).show();
-                            btn.hide();
+                        if(json.response == 1) {
+                            $('#successful_request'+elm.id.match(/\d+$/)).show();
+                            $("#"+elm.id).hide();
                         }
                     },
                     error: function(xhr, errmsg, err) {

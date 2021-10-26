@@ -8,13 +8,19 @@
 {% endblock %}
 
 {% block body_block %}
-        <a href={% url 'dogpark:logout' %}>logout</a>
         <div class="container" id="friend_request_list">
-        {% for item in incoming_requests %}
-            <div id="req{{forloop.counter0}}">
-                <p>{{item.first_name}} {{item.last_name}}</p>
-                <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Accept Friend</button>
+        {% if incoming_requests|length > 1 %}
+            {% for item in incoming_requests %}
+                <div id="req{{forloop.counter0}}">
+                    <p>{{item.first_name}} {{item.last_name}}</p>
+                    <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Accept Friend</button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div id="req0">
+                <p>{{incoming_requests.sender.first_name}} {{incoming_requests.sender.username}}</p>
+                <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{incoming_requests.sender.username}}>Accept Friend</button>
             </div>
-        {% endfor %}
+        {% endif %}
         </div>
 {% endblock %}

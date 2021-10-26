@@ -28,7 +28,10 @@ class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='the_sender',on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='the_receiver', on_delete=models.CASCADE)
     def __str__(self):
-        return "Friend request sent"
+        return "request sent"
+    
+    class Meta:
+        unique_together = (('sender', 'receiver'),)
     
 class Friendship(models.Model):
     from_friend = models.ForeignKey(User, related_name="from_friend", on_delete=models.CASCADE)
