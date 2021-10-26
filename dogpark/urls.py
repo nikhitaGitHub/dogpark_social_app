@@ -13,7 +13,7 @@ urlpatterns = [
     path('my_friends', views.myFriends.as_view(), name="my_friends"),
     path('see_friend_requests', views.seeFriendRequests.as_view(), name='see_friend_requests'),
     path('register/dogregisterform/', views.get_dog_form, name="dog_form"),
-    path('send_friend_request/', views.SendFriendRequest.as_view(), name="send_friend_request"),
+    path('accept_request/', views.AcceptRequests.as_view(), name="accept_request"),
     
     #This is restricted area, only loggen in users can see the homepage
     #Based on location , update dashboard view to mypark

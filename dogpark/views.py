@@ -148,12 +148,15 @@ class SendFriendRequest(View):
 class AcceptRequests(View):
     @method_decorator(login_required)
     def post(self,request):
+        print("Hitting the view")
         data = {'response': -1}
         uname = request.POST.get('uname')
         try:
-            from_friend = get_user(request)
+            from_friend = request.user
             to_friend = User.objects.get(username=uname)
-            friend = Friendship.objects.get_or_create(from_friend=from_friend, to_friend=to_friend)
+            friend, created = Friendship.objects.get_or_create(from_friend=from_friend, to_friend=to_friend)
+            if created:
+                return JsonResponse({'response': 1})
         except ValueError:
             return JsonResponse(data)
         return JsonResponse({'response': 1})

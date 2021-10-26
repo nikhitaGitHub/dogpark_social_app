@@ -41,12 +41,12 @@ $(document).ready(function() {
 
         function sendFriendRequest(elm) {
             var csrftoken = getCookie('csrftoken')
-            var url1 = '/dogpark/send_friend_request/';
-            var url2 = '/dogpark/accept_request'
+            var url = '/dogpark/send_friend_request/';
+
             $('#'+elm.id).click(function() {
                 var uname = $(this).attr('data-uname');
                 $.ajax({
-                    url: url1,
+                    url: url,
                     type: "POST",
                     data: {
                         csrfmiddlewaretoken: csrftoken,
@@ -65,10 +65,47 @@ $(document).ready(function() {
             })
         }
         
+        function acceptFriendRequest(elm) {
+            var csrftoken = getCookie('csrftoken')
+            var url = '/dogpark/accept_request/';
+            $('#'+elm.id).click(function() {
+                console.log("clicked");
+                var uname = $(this).attr('data-uname');
+                console.log("username " + uname);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        uname: uname
+                    },
+                    success: function(json) {
+                        console.log(json.response);
+                        if(json.response == 1) {
+                            console.log(json.response);
+                            console.log(elm.id);
+                            $('#friends'+elm.id.match(/\d+$/)).show();
+                            $("#"+elm.id).hide();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+": "+xhr.responseText);
+                    }
+                });
+            })
+        }
+
         var buttons = $("#people_list").find('button')
         buttons.each(function(index, elm) {
             if(elm.id.startsWith("add_friend_btn")) {
-                sendFriendRequest(elm)
+                sendFriendRequest(elm);
+            }
+        });
+
+        buttons = $("#friend_request_list").find('button')
+        buttons.each(function(index, elm) {
+            if(elm.id.startsWith("accept_friend_btn")) {
+                acceptFriendRequest(elm);
             }
         });
 });
