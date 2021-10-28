@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from dogpark.constants import charLen256, charLen100
+import datetime
 
 class Owner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -38,3 +39,15 @@ class Friendship(models.Model):
     to_friend= models.ForeignKey(User, related_name="to_friend", on_delete=models.CASCADE)
     def __str__(self):
         return "Friend request accepted"
+    
+    class Meta:
+        unique_together = (('from_friend', 'to_friend'),)
+        
+class Events(models.Model):
+    name = models.CharField(max_length=charLen256)
+    date = models.DateField(default=datetime.date.today, blank=True, null=True)
+    time = models.TimeField(auto_now=False, auto_now_add=False)
+    
+class Goals(models.Model):
+    description = models.CharField(max_length=charLen256)
+    pointsEarned = models.IntegerField(default=0)

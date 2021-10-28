@@ -20,8 +20,7 @@ $(document).ready(function() {
                 for(i = 0; i < num_dogs; i++) {
                     elm.append(data.form);
                 }
-            });
-         
+            });  
         });
 
         function getCookie(name) {
@@ -40,7 +39,7 @@ $(document).ready(function() {
         }
 
         function sendFriendRequest(elm) {
-            var csrftoken = getCookie('csrftoken')
+            var csrftoken = getCookie('csrftoken');
             var url = '/dogpark/send_friend_request/';
 
             $('#'+elm.id).click(function() {
@@ -66,7 +65,7 @@ $(document).ready(function() {
         }
         
         function acceptFriendRequest(elm) {
-            var csrftoken = getCookie('csrftoken')
+            var csrftoken = getCookie('csrftoken');
             var url = '/dogpark/accept_request/';
             $('#'+elm.id).click(function() {
                 console.log("clicked");
@@ -107,5 +106,48 @@ $(document).ready(function() {
             if(elm.id.startsWith("accept_friend_btn")) {
                 acceptFriendRequest(elm);
             }
+        });
+
+        $("#park_events").click(function() {
+            const url = '/dogpark/park_events/';
+            $.get(url, function(data) {
+                if(data == "success") {
+                    console.log("hola")
+                }
+            });
+            console.log("clicked");
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    //csrfmiddlewaretoken: csrftoken
+                },
+                success: function(json) {
+                    if(json.response == 1) {
+                        console.log("render");
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status+": "+xhr.responseText);
+                }
+            });
+        });
+
+        $("#park_goals").click(function() {
+            const url = "/dogpark/park_goals/";
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                   csrfmiddlewaretoken:csrftoken
+                },
+                success: function(json) {
+                    if(json.response == 1) {}
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status+": "+xhr.responseText);
+                }
+            });
         });
 });

@@ -1,3 +1,4 @@
+from re import U
 from django.forms.widgets import PasswordInput
 import requests
 from django.shortcuts import render, redirect
@@ -11,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.urls import reverse
+from django.db.models import Q
 import os
 
 # Create your views here.
@@ -96,23 +98,25 @@ def people(request):
     context_dict['user_list'] = user_list
     return render(request, 'dogpark/people.html', context=context_dict)
 
+@login_required
+def mypark(request):
+    context_dict = {}
+    return render(request, 'dogpark/mypark.html', context=context_dict)
+
 class seeFriendRequests(View):
     @method_decorator(login_required)
     def get(self, request):
         context_dict = {}
-        print("Inside funtion")
         my_requests = False
         fr = True
         u = get_user(request)
         if not request.user.is_anonymous:
-            print("USer is not anonymous")
             try:
-                my_requests = FriendRequest.objects.get(receiver=request.user)
-                #my_requests = FriendRequest.objects.all().filter(receiver=request.user)
+                already_friends = Friendship.objects.get(Q(from_friend=u) | Q(to_friend=u))
+                my_requests = FriendRequest.objects.filter(Q(receiver=request.user) & ~Q(sender=already_friend))
             except FriendRequest.DoesNotExist:
                 fr = None
             if fr == None:
-                print("redirecting to homepage")
                 return redirect(reverse('dogpark:index'))
             context_dict['incoming_requests'] = my_requests
             return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
@@ -148,7 +152,6 @@ class SendFriendRequest(View):
 class AcceptRequests(View):
     @method_decorator(login_required)
     def post(self,request):
-        print("Hitting the view")
         data = {'response': -1}
         uname = request.POST.get('uname')
         try:
@@ -160,3 +163,17 @@ class AcceptRequests(View):
         except ValueError:
             return JsonResponse(data)
         return JsonResponse({'response': 1})
+    
+class ParkGoals(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        context_dict = {}
+        redirect(reverse('dogpark:park_goals'))
+        return HttpResponse(1)
+         
+class ParkEvents(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        context_dict = {}
+        redirect(reverse('dogpark:park_events'))
+        return HttpResponse(1)

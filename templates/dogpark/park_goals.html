@@ -1,0 +1,17 @@
+{% extends 'dogpark/base.html' %}
+{% load static %}
+{% block title_block %}
+    Goals
+{% endblock %}
+
+{% block header_block %}
+{% endblock %}
+
+{% block body_block %}
+        <div class="container" id="Goals">
+            {% for item in goals %}
+                <p>{{goals.description}} {{goals.pointsEarned}} </p>
+                <button>Goal Complete</button>
+            {% endfor %}
+        </div>
+{% endblock %}

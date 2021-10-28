@@ -1,0 +1,19 @@
+{% extends 'dogpark/base.html' %}
+{% load static %}
+{% block title_block %}
+    Events
+{% endblock %}
+
+{% block header_block %}
+{% endblock %}
+
+{% block body_block %}
+        <div class="container" id="Events">
+            {% for item in events %}
+                <p>{{item.name}} {{item.date}} {{item.time}}</p>
+                <button>Attend</button>
+                <button class="hidden">Attending</button>
+                <button class="hidden">Decline</button>
+            {% endfor %}
+        </div>
+{% endblock %}

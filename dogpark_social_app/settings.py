@@ -128,3 +128,5 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 LOGIN_URL =  'dogpark:login'
+
+ALLOWED_HOSTS=['*']
