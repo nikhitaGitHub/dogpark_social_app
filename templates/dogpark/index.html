@@ -15,7 +15,7 @@ dogpark
     <a href="my pet">My Pet</a>
     <a href="{% url 'dogpark:mypark' %}">My Park</a>
     <a href="my achievements">My Achievements</a>
-    <img src="{{MEDIA_URL}}placeholder.png">
+    <img src={% static 'images/placeholder.png' %}>
     <!--<button>Notifications</button>-->
     <button>Settings</button>
     <a href={% url 'dogpark:logout' %}>logout</a>

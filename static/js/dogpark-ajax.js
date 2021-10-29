@@ -68,9 +68,7 @@ $(document).ready(function() {
             var csrftoken = getCookie('csrftoken');
             var url = '/dogpark/accept_request/';
             $('#'+elm.id).click(function() {
-                console.log("clicked");
                 var uname = $(this).attr('data-uname');
-                console.log("username " + uname);
                 $.ajax({
                     url: url,
                     type: "POST",
@@ -79,10 +77,7 @@ $(document).ready(function() {
                         uname: uname
                     },
                     success: function(json) {
-                        console.log(json.response);
                         if(json.response == 1) {
-                            console.log(json.response);
-                            console.log(elm.id);
                             $('#friends'+elm.id.match(/\d+$/)).show();
                             $("#"+elm.id).hide();
                         }
@@ -92,6 +87,141 @@ $(document).ready(function() {
                     }
                 });
             })
+        }
+
+        function attendEvent(elm) {
+            var elmId = '#'+elm.id;
+            var url = '/dogpark/attend_event/';
+            var csrftoken = getCookie('csrftoken');
+            $(elmId).click(function() {
+                var eventid = $(this).attr('data-elmid');
+                $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        eventid: eventid
+                    },
+                    success: function(json) {
+                        if(json.response == 1) {
+                            $('#decline_event'+elm.id.match(/\d+$/)).show();
+                            $('#attending_event'+elm.id.match(/\d+$/)).show();  
+                            $(elmId).hide();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText);
+                    }
+                });
+            });
+        }
+
+        function declineEvent(elm) {
+            var elmId = '#'+elm.id; 
+            var url = '/dogpark/decline_event/';
+            var csrftoken = getCookie('csrftoken');
+            $(elmId).click(function() {
+                var eventid = $(this).attr('data-elmid');
+                $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        eventid: eventid
+                    },
+                    success: function(json) {
+                        if(json.response == 1) {
+                            $('#attending_event'+elm.id.match(/\d+$/)).hide();
+                            $('#attend_event'+elm.id.match(/\d+$/)).show();
+                            $(elmId).hide();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+                });
+            });
+        }
+
+        function addGoal(elm) {
+            var elmId = '#'+elm.id; 
+            var url = '/dogpark/add_goal/';
+            var csrftoken = getCookie('csrftoken');
+            $(elmId).click(function() {
+                var goalid = $(this).attr('data-goalid');
+                $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        goalid: goalid
+                    },
+                    success: function(json) {
+                        if(json.response == 1) {
+                            $('#finish_goal'+elm.id.match(/\d+$/)).show();
+                            $('#remove_goal'+elm.id.match(/\d+$/)).show();
+                            $(elmId).hide();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+                });
+            });
+        }
+
+        function finishGoal(elm) {
+            var elmId = '#'+elm.id; 
+            var url = '/dogpark/finish_goal/';
+            var csrftoken = getCookie('csrftoken');
+            $(elmId).click(function() {
+                var goalid = $(this).attr('data-goalid');
+                $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        goalid: goalid
+                    },
+                    success: function(json) {
+                        if(json.response == 1) {
+                            $('#goal_completed'+elm.id.match(/\d+$/)).show();
+                            $('#remove_goal'+elm.id.match(/\d+$/)).hide();
+                            $(elmId).hide();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+                });
+            });
+        }
+
+        function removeGoal(elm) {
+            var elmId = '#'+elm.id; 
+            var url = '/dogpark/remove_goal/';
+            var csrftoken = getCookie('csrftoken');
+            $(elmId).click(function() {
+                var goalid = $(this).attr('data-goalid');
+                $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                        goalid: goalid
+                    },
+                    success: function(json) {
+                        if(json.response == 1) {
+                            $('#finish_goal'+elm.id.match(/\d+$/)).hide();
+                            $('#add_goal'+elm.id.match(/\d+$/)).show();
+                            $(elmId).hide();
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+                });
+            });
         }
 
         var buttons = $("#people_list").find('button')
@@ -108,46 +238,26 @@ $(document).ready(function() {
             }
         });
 
-        $("#park_events").click(function() {
-            const url = '/dogpark/park_events/';
-            $.get(url, function(data) {
-                if(data == "success") {
-                    console.log("hola")
-                }
-            });
-            console.log("clicked");
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: {
-                    //csrfmiddlewaretoken: csrftoken
-                },
-                success: function(json) {
-                    if(json.response == 1) {
-                        console.log("render");
-                    }
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log(xhr.status+": "+xhr.responseText);
-                }
-            });
+        buttons = $('#Events').find('button')
+        buttons.each(function(index, elm) {
+            if(elm.id.startsWith("attend_event")) {
+                attendEvent(elm);
+            }
+            else if(elm.id.startsWith("decline_event")) {
+                declineEvent(elm);
+            }
         });
 
-        $("#park_goals").click(function() {
-            const url = "/dogpark/park_goals/";
-            var csrftoken = getCookie('csrftoken');
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                   csrfmiddlewaretoken:csrftoken
-                },
-                success: function(json) {
-                    if(json.response == 1) {}
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log(xhr.status+": "+xhr.responseText);
-                }
-            });
-        });
+        buttons = $('#Goals').find('button')
+        buttons.each(function(index,elm) {
+            if(elm.id.startsWith("add_goal")) {
+                addGoal(elm);
+            }
+            else if(elm.id.startsWith("finish_goal")) {
+                finishGoal(elm);
+            }
+            else if(elm.id.startsWith("remove_goal")) {
+                removeGoal(elm);
+            }
+        })
 });

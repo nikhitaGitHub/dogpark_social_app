@@ -47,7 +47,12 @@ class Events(models.Model):
     name = models.CharField(max_length=charLen256)
     date = models.DateField(default=datetime.date.today, blank=True, null=True)
     time = models.TimeField(auto_now=False, auto_now_add=False)
+    attending = models.BooleanField(default=False)
+    attended = models.BooleanField(default=False)
     
 class Goals(models.Model):
     description = models.CharField(max_length=charLen256)
-    pointsEarned = models.IntegerField(default=0)
+    points_earned = models.IntegerField(default=0)
+    add_goal = models.BooleanField(default= False)
+    complete_goal = models.BooleanField(default=False)
+    

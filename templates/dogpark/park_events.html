@@ -10,10 +10,17 @@
 {% block body_block %}
         <div class="container" id="Events">
             {% for item in events %}
-                <p>{{item.name}} {{item.date}} {{item.time}}</p>
-                <button>Attend</button>
-                <button class="hidden">Attending</button>
-                <button class="hidden">Decline</button>
+                <p>{{item.name}}</p>
+                <p>{{item.date}} {{item.time}}</p>
+                {% if item.attending %}
+                    <button id="attend_event{{forloop.counter0}}" class="hidden" data-elmid="{{item.id}}">Attend</button>
+                    <p id="attending_event{{forloop.counter0}}">Attending</p>
+                    <button id="decline_event{{forloop.counter0}}" data-elmid="{{item.id}}">Decline</button>
+                {% else %}
+                    <button id="attend_event{{forloop.counter0}}" data-elmid="{{item.id}}">Attend</button>
+                    <p id="attending_event{{forloop.counter0}}" class="hidden">Attending</p>
+                    <button id="decline_event{{forloop.counter0}}" class="hidden" data-elmid="{{item.id}}">Decline</button>
+                {% endif %}
             {% endfor %}
         </div>
 {% endblock %}

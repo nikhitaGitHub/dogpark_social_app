@@ -4,7 +4,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from dogpark.models import Friendship, Owner, Dog, FriendRequest
+from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, Events
 from dogpark.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user
@@ -88,10 +88,6 @@ def register(request):
     return render(request, 'dogpark/register.html', context=context_dict)
 
 @login_required
-def dashboard():
-    pass
-
-@login_required
 def people(request):
     user_list = User.objects.exclude(username=get_user(request))
     context_dict = {}
@@ -103,6 +99,112 @@ def mypark(request):
     context_dict = {}
     return render(request, 'dogpark/mypark.html', context=context_dict)
 
+@login_required
+def park_events(request):
+    if request.method == "GET":
+        context_dict = {}
+        try:
+            events=Events.objects.all()
+            context_dict['events'] = events
+        except Events.DoesNotExist:
+            events = None
+        if events == None:
+            print("None")
+            return render(request, 'dogpark/mypark.html', context=context_dict)
+        print("rendering events")
+        return render(request, 'dogpark/park_events.html', context=context_dict)
+    else:
+        print("rendering mypark")
+        return render(request, 'dogpark/mypark.html')
+
+@login_required
+def park_goals(request):
+    context_dict = {}
+    try:
+        goals = Goals.objects.all()
+        context_dict['goals'] = goals
+    except Goals.DoesNotExist:
+        goals = None
+    if goals == None:
+        return render(request, 'dogpark/mypark.html', context=context_dict)
+    return render(request, 'dogpark/park_goals.html', context=context_dict)
+
+@login_required
+def attend_event(request):
+    context_dict = {}
+    elm_id = request.POST.get('eventid')
+    data = {'response': -1}
+    try:
+        e = Events.objects.get(id=int(elm_id))
+        e.attending = True 
+        e.save()
+    except Events.DoesNotExist:   
+        e = None
+    if e == None:
+        return JsonResponse(data)
+    return JsonResponse({'response': 1})
+    
+@login_required
+def decline_event(request):
+    context_dict = {}
+    elm_id = request.POST.get('eventid')
+    data = {'response': -1}
+    try:
+        e = Events.objects.get(id=int(elm_id))
+        e.attending = False 
+        e.save()
+    except Events.DoesNotExist:
+        e = None
+    if e == None:
+        return JsonResponse(data)
+    return JsonResponse({'response': 1})
+    
+@login_required
+def add_goal(request):
+    context_dict = {}
+    elm_id = request.POST.get('goalid')
+    data = {'response': -1}
+    try:
+        e = Goals.objects.get(id=int(elm_id))
+        e.add_goal = True 
+        e.save()
+    except Goals.DoesNotExist:
+        e = None
+    if e == None:
+        return JsonResponse(data)
+    return JsonResponse({'response': 1})    
+    
+@login_required
+def remove_goal(request):
+    context_dict = {}
+    elm_id = request.POST.get('goalid')
+    data = {'response': -1}
+    try:
+        e = Goals.objects.get(id=int(elm_id))
+        e.add_goal = False 
+        e.save()
+    except Goals.DoesNotExist:
+        e = None
+    if e == None:
+        return JsonResponse(data)
+    return JsonResponse({'response': 1})
+    
+@login_required
+def finish_goal(request):
+    context_dict = {}
+    elm_id = request.POST.get('goalid')
+    data = {'response': -1}
+    try:
+        e = Goals.objects.get(id=int(elm_id))
+        e.complete_goal = True
+        e.points_earned = 50 
+        e.save()
+    except Goals.DoesNotExist:
+        e = None
+    if e == None:
+        return JsonResponse(data)
+    return JsonResponse({'response': 1})  
+ 
 class seeFriendRequests(View):
     @method_decorator(login_required)
     def get(self, request):
@@ -163,17 +265,3 @@ class AcceptRequests(View):
         except ValueError:
             return JsonResponse(data)
         return JsonResponse({'response': 1})
-    
-class ParkGoals(View):
-    @method_decorator(login_required)
-    def get(self, request):
-        context_dict = {}
-        redirect(reverse('dogpark:park_goals'))
-        return HttpResponse(1)
-         
-class ParkEvents(View):
-    @method_decorator(login_required)
-    def get(self, request):
-        context_dict = {}
-        redirect(reverse('dogpark:park_events'))
-        return HttpResponse(1)

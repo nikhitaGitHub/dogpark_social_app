@@ -10,8 +10,19 @@
 {% block body_block %}
         <div class="container" id="Goals">
             {% for item in goals %}
-                <p>{{goals.description}} {{goals.pointsEarned}} </p>
-                <button>Goal Complete</button>
+                <p>{{item.description}}</p>
+                <p>You will earn {{item.points_earned}} points</p>
+                {% if item.add_goal %}
+                    <button id="finish_goal{{forloop.counter0}}" data-goalid="{{item.id}}">Goal Complete</button>
+                    <button id="remove_goal{{forloop.counter0}}" data-goalid="{{item.id}}">Remove Goal</button>
+                    <button id="add_goal{{forloop.counter0}}" class="hidden" data-goalid="{{item.id}}">Add Goal</button>
+                    <p id="goal_completed{{forloop.counter0}}" class="hidden">Goal completed</p>
+                {% else %}
+                    <button id="finish_goal{{forloop.counter0}}" class="hidden" data-goalid="{{item.id}}">Goal Complete</button>
+                    <button id="remove_goal{{forloop.counter0}}" class="hidden" data-goalid="{{item.id}}">Remove Goal</button>
+                    <button id="add_goal{{forloop.counter0}}" data-goalid="{{item.id}}">Add Goal</button>
+                    <p id="goal_completed{{forloop.counter0}}" class="hidden">Goal completed</p>
+                {% endif %}
             {% endfor %}
         </div>
 {% endblock %}

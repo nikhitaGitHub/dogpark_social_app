@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','dogpark.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','dogpark_social_app.settings')
 
 import django
 import datetime
@@ -19,13 +19,13 @@ d5 = datetime.date(2021, 12, 15)
  
 
 def populate():
-    goals = [{'description': 'play fetch', 'pointsEarned': 50},
-             {'description': 'play tug of war', 'pointsEarned': 50},
-             {'description': 'play hide and seek', 'pointsEarned': 50},
-             {'description': 'ride a bike', 'pointsEarned': 50},
-             {'description': 'walk', 'pointsEarned': 50},
-             {'description': 'hike', 'pointsEarned': 50},
-             {'description': 'run', 'pointsEarned': 50}]
+    goals = [{'description': 'play fetch', 'points_earned': 50},
+             {'description': 'play tug of war', 'points_earned': 50},
+             {'description': 'play hide and seek', 'points_earned': 50},
+             {'description': 'ride a bike', 'points_earned': 50},
+             {'description': 'walk', 'points_earned': 50},
+             {'description': 'hike', 'points_earned': 50},
+             {'description': 'run', 'points_earned': 50}]
     
     events =[{'name': 'puppy play party' , 'date': d1, 'time': t1},
              {'name': 'charity event', 'date': d2, 'time': t2},
@@ -42,10 +42,14 @@ def populate():
     for item in events:
         add_event(item)
     
-    def add_goal(item):
-        g = Goals.objects.get_or_create(description=item.description, pointsEarned=item.pointsEarned)[0]
-        g.save()
+def add_goal(item):
+    g = Goals.objects.get_or_create(description=item['description'], points_earned=item['points_earned'])[0]
+    g.save()
 
-    def add_event(item):
-        e = Events.objects.get_or_create(name=item.name, date=item.date, time=item.time)
-        e.save()
+def add_event(item):
+    e = Events.objects.get_or_create(name=item['name'], date=item['date'], time=item['time'])[0]
+    e.save()
+        
+if __name__ == '__main__':
+    print("Running populate dogpark")
+    populate()
