@@ -36,7 +36,7 @@ class FriendRequest(models.Model):
     
 class Friendship(models.Model):
     from_friend = models.ForeignKey(User, related_name="from_friend", on_delete=models.CASCADE)
-    to_friend= models.ForeignKey(User, related_name="to_friend", on_delete=models.CASCADE)
+    to_friend= models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return "Friend request accepted"
     
@@ -55,4 +55,8 @@ class Goals(models.Model):
     points_earned = models.IntegerField(default=0)
     add_goal = models.BooleanField(default= False)
     complete_goal = models.BooleanField(default=False)
+
+class Achievement(models.Model):
+    goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
+    created = models.DateField(default=datetime.date.today)
     

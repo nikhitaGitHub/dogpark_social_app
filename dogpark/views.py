@@ -1,10 +1,11 @@
 from re import U
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms.widgets import PasswordInput
 import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, Events
+from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, Events, Achievement
 from dogpark.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user
@@ -89,7 +90,14 @@ def register(request):
 
 @login_required
 def people(request):
+    u = request.user
+    friends = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
+    friend_req = FriendRequest.objects.filter(Q(sender=u) | Q(receiver=u))
     user_list = User.objects.exclude(username=get_user(request))
+    for x in friends.iterator():
+        user_list = user_list.filter(~Q(id=x.from_friend.id) & ~Q(id=x.to_friend.id))
+    for x in friend_req.iterator():
+        user_list = user_list.filter(~Q(id=x.sender.id) & ~Q(id=x.receiver.id))
     context_dict = {}
     context_dict['user_list'] = user_list
     return render(request, 'dogpark/people.html', context=context_dict)
@@ -205,22 +213,55 @@ def finish_goal(request):
         return JsonResponse(data)
     return JsonResponse({'response': 1})  
  
+@login_required
+def achievements(request):
+    context_dict = {}
+    total_points = 0
+    try:
+        g = Goals.objects.filter(complete_goal=True)
+        if g.exists():
+            for x in g.iterator():
+                total_points = total_points + x.points_earned
+                a = Achievement.objects.get_or_create(goal=x)[0]
+                a.save()
+        objs = Achievement.objects.all()
+        context_dict['achievements'] = objs.order_by("created")
+        context_dict['total_points'] = total_points
+    except Achievement.DoesNotExist:
+        objs = None
+    if objs == None:
+        return render(request, 'dogpark/index.html', context=context_dict)
+    return render(request, 'dogpark/achievement.html', context=context_dict)
+ 
 class seeFriendRequests(View):
     @method_decorator(login_required)
     def get(self, request):
         context_dict = {}
-        my_requests = False
+        my_requests = None
+        already_friends = None
         fr = True
         u = get_user(request)
         if not request.user.is_anonymous:
             try:
-                already_friends = Friendship.objects.get(Q(from_friend=u) | Q(to_friend=u))
-                my_requests = FriendRequest.objects.filter(Q(receiver=request.user) & ~Q(sender=already_friend))
-            except FriendRequest.DoesNotExist:
-                fr = None
+                already_friends = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
+                if already_friends == None:
+                    my_requests = FriendRequest.objects.filter(receiver=request.user)
+                else:
+                    for x in already_friends.iterator():
+                        my_requests = FriendRequest.objects.filter(Q(receiver=request.user) & (~Q(sender_id=x.from_friend_id) | ~Q(sender_id=x.to_friend_id)))
+            except ObjectDoesNotExist:
+                try:
+                    my_requests = FriendRequest.objects.filter(receiver=request.user)
+                except ObjectDoesNotExist:
+                    fr = None
+                except FriendRequest.DoesNotExist:
+                    fr = None
             if fr == None:
-                return redirect(reverse('dogpark:index'))
+                request_exists = False
+            else:
+                request_exists = True
             context_dict['incoming_requests'] = my_requests
+            context_dict['request_exists'] = request_exists
             return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
     
 class myFriends(View):
@@ -229,8 +270,7 @@ class myFriends(View):
         context_dict = {}
         u = get_user(request)
         try:
-            friendship = Friendship.objects.get(from_friend=u)
-            friendship.extend(Friendship.objects.get(to_friend=u))
+            friendship = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
         except Friendship.DoesNotExist:
             friendship = None
         if friendship == None:
@@ -241,6 +281,7 @@ class myFriends(View):
 class SendFriendRequest(View):
     @method_decorator(login_required)
     def post(self,request):
+        print("sending")
         data = {'response' : -1}
         uname = request.POST.get('uname')
         try:
@@ -254,8 +295,11 @@ class SendFriendRequest(View):
 class AcceptRequests(View):
     @method_decorator(login_required)
     def post(self,request):
+        print("In Post")
         data = {'response': -1}
         uname = request.POST.get('uname')
+        print(uname)
+    
         try:
             from_friend = request.user
             to_friend = User.objects.get(username=uname)

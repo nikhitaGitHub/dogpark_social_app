@@ -11,10 +11,12 @@
         <div class="container" id="people_list">
         {% for item in user_list %}
             <div id="u{{forloop.counter0}}">
-                <p>{{item.first_name}} {{item.last_name}}</p>
+                <p>{{item.first_name}} {{item.last_name}} username: {{item.username}}</p>
                 <button id="add_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Add Friend</button>
                 <p id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</p>
             </div>
+        {% empty %}
+        <p>There is nothing to show here. Either you have already sent or received request or are friends already.</p>
         {% endfor %}
         </div>
 {% endblock %}

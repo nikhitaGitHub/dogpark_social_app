@@ -9,19 +9,19 @@
 
 {% block body_block %}
         <div class="container" id="friend_request_list">
-        {% if incoming_requests|length > 1 %}
+        {% if request_exists %}
             {% for item in incoming_requests %}
                 <div id="req{{forloop.counter0}}">
-                    <p>{{item.first_name}} {{item.last_name}}</p>
-                    <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{incoming_requests.sender.username}}>Accept Friend</button>
+                    <p> {{item.sender.username}}</p>
+                    <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.sender.username}}>Accept Friend</button>
                     <p id="friends{{forloop.counter0}}" class="hidden">Friends</p>
                 </div>
+            {% empty %}
+                <p>Sorry, no requests</p>
             {% endfor %}
         {% else %}
-            <div id="req0">
-                <p>{{incoming_requests.sender.first_name}} {{incoming_requests.sender.last_name}} {{incoming_requests.sender.username}} </p>
-                <button id="accept_friend_btn0" data-uname={{incoming_requests.sender.username}}>Accept Friend</button>
-                <p id="friends0" class="hidden">Friends</p>
+            <div>
+                <p>You have no requests</p>
             </div>
         {% endif %}
         </div>

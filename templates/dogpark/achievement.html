@@ -1,0 +1,19 @@
+{% extends 'dogpark/base.html' %}
+{% load static %}
+{% block title_block %}
+    search people
+{% endblock %}
+
+{% block header_block %}
+{% endblock %}
+
+{% block body_block %}
+        <div class="container" id="achievements">
+        {% for item in achievements %}
+            <div id="a{{forloop.counter0}}">
+                <p>{{item.goal.description}} {{item.goal.points_earned}}</p>
+            </div>
+        {% endfor %}
+        <p>Your total points is {{total_points}}</p>
+        </div>
+{% endblock %}

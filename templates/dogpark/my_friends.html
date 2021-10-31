@@ -1,0 +1,25 @@
+{% extends 'dogpark/base.html' %}
+{% load static %}
+{% block title_block %}
+    search people
+{% endblock %}
+
+{% block header_block %}
+{% endblock %}
+
+{% block body_block %}
+        <div class="container" id="friend_list">
+        {% for item in friends %}
+            <div id="f{{forloop.counter0}}"></div>
+            {% if user.id == item.from_friend.id %}
+                <p>{{item.to_friend.first_name}} {{item.to_friend.last_name}} username: {{item.to_friend.username}}</p>
+            {% else %}
+                <p>{{item.from_friend_first_name}} {{item.from_friend_last_name}} username: {{item.from_friend.username}}</p>
+            {% endif %}
+                <p id="successful_request{{forloop.counter0}}">Friends</p>
+            </div>
+        {% empty %}
+            <p>You have no friends !</p>
+        {% endfor %}
+        </div>
+{% endblock %}
