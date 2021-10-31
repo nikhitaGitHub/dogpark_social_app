@@ -64,7 +64,6 @@ def register(request):
             user.set_password(user.password)
             user.save()
             x = User.objects.get(username=user.username)
-            print(x)
             
             profile = profile_form.save(commit=False)  
             #profile_form. = user_form.num_dogs
@@ -117,12 +116,9 @@ def park_events(request):
         except Events.DoesNotExist:
             events = None
         if events == None:
-            print("None")
             return render(request, 'dogpark/mypark.html', context=context_dict)
-        print("rendering events")
         return render(request, 'dogpark/park_events.html', context=context_dict)
     else:
-        print("rendering mypark")
         return render(request, 'dogpark/mypark.html')
 
 @login_required
@@ -244,7 +240,7 @@ class seeFriendRequests(View):
         if not request.user.is_anonymous:
             try:
                 already_friends = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
-                if already_friends == None:
+                if not already_friends:
                     my_requests = FriendRequest.objects.filter(receiver=request.user)
                 else:
                     for x in already_friends.iterator():
@@ -281,7 +277,6 @@ class myFriends(View):
 class SendFriendRequest(View):
     @method_decorator(login_required)
     def post(self,request):
-        print("sending")
         data = {'response' : -1}
         uname = request.POST.get('uname')
         try:
@@ -295,15 +290,13 @@ class SendFriendRequest(View):
 class AcceptRequests(View):
     @method_decorator(login_required)
     def post(self,request):
-        print("In Post")
         data = {'response': -1}
         uname = request.POST.get('uname')
-        print(uname)
-    
         try:
             from_friend = request.user
             to_friend = User.objects.get(username=uname)
             friend, created = Friendship.objects.get_or_create(from_friend=from_friend, to_friend=to_friend)
+            FriendRequest.objects.get(Q(sender=to_friend) & Q(receiver=from_friend)).delete()
             if created:
                 return JsonResponse({'response': 1})
         except ValueError:

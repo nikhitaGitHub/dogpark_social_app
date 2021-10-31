@@ -10,7 +10,7 @@
 {% block body_block %}
         <div class="container" id="friend_list">
         {% for item in friends %}
-            <div id="f{{forloop.counter0}}"></div>
+            <div id="f{{forloop.counter0}}">
             {% if user.id == item.from_friend.id %}
                 <p>{{item.to_friend.first_name}} {{item.to_friend.last_name}} username: {{item.to_friend.username}}</p>
             {% else %}
