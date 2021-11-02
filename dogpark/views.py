@@ -63,6 +63,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+            Owner.get_or_create(user = user, num_dogs = user.num_dogs)
             x = User.objects.get(username=user.username)
             
             profile = profile_form.save(commit=False)  
@@ -104,6 +105,15 @@ def people(request):
 @login_required
 def mypark(request):
     context_dict = {}
+    try:
+        visitors = Owner.objects.filter(checked_in=True).count()
+        current = Owner.objects.get(user=request.user)
+    except Owner.DoesNotExist:
+        visitors = None
+    if visitors == None:
+        return render(request, 'dogpark/index.html', context=context_dict)
+    context_dict['visitors'] = visitors
+    context_dict['checked_in'] = current.checked_in
     return render(request, 'dogpark/mypark.html', context=context_dict)
 
 @login_required
@@ -228,7 +238,19 @@ def achievements(request):
     if objs == None:
         return render(request, 'dogpark/index.html', context=context_dict)
     return render(request, 'dogpark/achievement.html', context=context_dict)
- 
+
+@login_required
+def my_pet(request):
+    context_dict = {}
+    try:
+        my_pets = Dog.objects.filter(owner_id=request.user.id)
+    except Dog.DoesNotExist:
+        my_pets = None
+    context_dict['my_pets'] = my_pets
+    if my_pets == None:
+        return render(request, 'dogpark/index.html', context=context_dict)
+    return render(request, 'dogpark/my_pet.html', context=context_dict)
+        
 class seeFriendRequests(View):
     @method_decorator(login_required)
     def get(self, request):
@@ -301,4 +323,30 @@ class AcceptRequests(View):
                 return JsonResponse({'response': 1})
         except ValueError:
             return JsonResponse(data)
+        return JsonResponse({'response': 1})
+    
+class check_in(View):
+    @method_decorator(login_required)
+    def post(self, request):
+        try:
+            obj = Owner.objects.get(user=request.user)
+            obj.checked_in = True
+            obj.save()
+        except Owner.DoesNotExist:
+            return JsonResponse({'response': -1})
+        except ValueError:
+            return JsonResponse({'response': -1})
+        return JsonResponse({'response': 1})
+
+class check_out(View):
+    @method_decorator(login_required)
+    def post(self, request):
+        try:
+            obj = Owner.objects.get(user=request.user)
+            obj.checked_in = False
+            obj.save()
+        except Owner.DoesNotExist:
+            return JsonResponse({'response': -1})
+        except ValueError:
+            return JsonResponse({'response': -1})
         return JsonResponse({'response': 1})

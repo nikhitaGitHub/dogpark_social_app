@@ -7,6 +7,7 @@ import datetime
 class Owner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     num_dogs = models.IntegerField(default=0)
+    checked_in = models.BooleanField(default=False)
     def __str__(self):
         #return self.user.first_name + 
         return " is owner of " + self.num_dogs + " dogs"
@@ -59,4 +60,3 @@ class Goals(models.Model):
 class Achievement(models.Model):
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
     created = models.DateField(default=datetime.date.today)
-    

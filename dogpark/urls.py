@@ -22,8 +22,10 @@ urlpatterns = [
     path('add_goal/', views.add_goal, name="add_goal"),
     path('finish_goal/', views.finish_goal, name="finish_goal"),
     path('remove_goal/', views.remove_goal, name="remove_goal"),
-    path('achievements/', views.achievements, name="achievements")
-    
+    path('achievements/', views.achievements, name="achievements"),
+    path('check_in/', views.check_in.as_view(), name="check_in"),
+    path('check_out/', views.check_out.as_view(), name="check_out"),
+    path('my_pet/', views.my_pet, name="my_pet")
     #This is restricted area, only loggen in users can see the homepage
     #Based on location , update dashboard view to mypark
     #path('') 
