@@ -10,13 +10,13 @@ class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(), required=True),
     first_name = forms.CharField(max_length=charLen100, widget = forms.TextInput(attrs={'placeholder': 'First Name'}))
     last_name = forms.CharField(max_length=charLen100, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
-    num_dogs = forms.CharField(label="How many dogs do you own?", widget=forms.Select(choices=DOG_NUMBER_CHOICES))
+    num_dogs = forms.CharField(label="How many dogs do you own?", widget=forms.Select(choices=DOG_NUMBER_CHOICES, attrs={'class': "custom-select"}))
     class Meta:
         model = User
         fields = ('username', 'email', 'password','first_name', 'last_name', 'num_dogs')
 
 class UserProfileForm(forms.ModelForm):
-    #gender = forms.ChoiceField(choices=Dog.GENDER_CHOICES, widget=forms.RadioSelect(attrs={'class': "custom-radio-list"}))
+    gender = forms.ChoiceField(choices=Dog.GENDER_CHOICES, widget=forms.Select(attrs={'class': "custom-select"}))
     age = forms.NumberInput(attrs={'required':True})
     breed = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Enter breed'}))
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'dog\'s name'}))

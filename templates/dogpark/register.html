@@ -1,6 +1,6 @@
 {% extends 'dogpark/base.html' %}
-
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title_block %}
     Registeration
@@ -8,18 +8,28 @@
 
 {% block body_block %}
     {% if registered %}
-        <h6>Thank you for registering</h6>
+    <div class="container-fluid text-center">
+        <h2>Thank you for registering</h2>
         <a href="{% url 'dogpark:index'%}"> Return to home </a>
+    </div>
     {% else %}
-    <h6>Register</h6>
-    <div class="container text-sm-center" id="registeration_form">
-        <form id="register_form" method="post" action="{%url 'dogpark:register' %}">
+    <h1 class="text-center">Register</h1>
+    <div class="container-fluid d-flex justify-content-lg-center" id="registeration_form">
+        <form id="register_form" method="post" action="{% url 'dogpark:register' %}">
             {% csrf_token %}
-            {{ user_form.as_p }}
-            <div id="prof">
-                {{profile_form.as_p}}
+            <div id="userinfo">
+                {{ user_form.as_p }}
             </div>
-            <input type="submit" name="submit" value="Register"/>
+            <div id="prof"> 
+                {{ profile_form.management_form | crispy }}    
+                {% for form in profile_form %}
+                <fieldset>
+                    <legend>Dog 1</legend>
+                        {{ form }}
+                </fieldset>
+                {% endfor %}
+            </div>
+            <input id="register" class="btn btn-success" type="submit" name="submit" value="Register"/>
         </form>
     </div>
     {% endif %}

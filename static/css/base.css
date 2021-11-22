@@ -1,3 +1,220 @@
 .hidden {
     display:none;
 }
+
+#map_canvas { 
+	height: 400px;
+	width: 80%; 
+	margin: 0px; 
+	padding: 0px;
+}
+
+nav#menu_bar {
+    display:block;
+}
+
+nav#menu_bar ul li {
+	padding-left :20px;
+	padding-right:20px;
+}
+
+nav#menu_bar ul li a {
+	color: #FFFFFF;
+	font-size: 14px;
+}
+
+nav#menu_bar ul li a:hover{
+	color: #FAF9F6;
+	background-color: #6495ED;
+	height: inherit;
+	width: inherit;
+}
+
+nav#menu_bar div {
+	height: inherit;
+}
+
+#map {
+	padding: 2em;
+}
+
+#greeting, #notification {
+	padding: 0.5em;
+}
+
+#menu_basic a {
+	text-decoration: none;
+	color:#FFFFFF;
+	font-size: 14px;
+	padding: 1em;
+}
+
+#menu_basic a:hover {
+	color: #FAF9F6;
+	background-color: #6495ED;
+}
+
+[id^="dog"] {
+	width: 25%;
+	height: 25%;
+	vertical-align: middle;
+}
+
+[id$="gender"] {
+	width: 60%;
+}
+
+[id^="infoDog"] p {
+	display: inline-block;
+}
+
+[id^="infoDog"] {
+	display: inline-block;
+}
+
+*{
+	font-family: 'Open Sans', sans-serif;
+}
+
+#register h1 {
+	display: block;
+}
+
+#register form + div p {
+	text-align: center;
+}
+
+#login_form div {
+	padding-top: 10%;
+	margin: 0 auto;
+	width: 80%;
+}
+
+#login_form + div {
+	padding-top: 10%;
+}
+
+#login_form {
+	text-align: center;
+}
+
+#img_logo {
+	padding: 2%;
+	width: 80%;
+	height: 350px;
+}
+
+#visitorInfo {
+	padding: 5%;
+}
+
+#mypark a {
+	color: #FFFFFF;
+}
+
+#mypark a:hover {
+	text-decoration: transparent;
+}
+
+[id^=add_friend_btn] {
+	display: block;
+	margin-top: 1rem;
+}
+
+[id^="dogPic"] {
+	width: 100%;
+	height: 100%;
+}
+
+form#register_form input {
+    display: flex;
+}
+
+form#register_form input {
+    display: inline-block;
+    margin: 0 auto;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+	width: 60%;
+	height: 35px;
+}
+
+.custom-select{
+    border: solid 3px #007BFF;
+    display: block;
+    margin: 0 auto;
+}
+
+form#register_form span {
+    display: block;
+}
+
+form#register_form input.btn {
+    border: none;
+	display: block;
+	width: 40%;
+	margin-top: 2%;
+	height: 60px;
+}
+
+#registeration_form p label {
+	font-size: 16px;
+	font-weight: bolder;
+	width: 50%;
+}
+
+#id_num_dogs {
+	width: 60%;
+}
+
+form#register_form p {
+	text-align:center;
+}
+
+div#prof table {
+	box-shadow: 0px 0px 0px 1px inset;
+	padding: 1%;
+	margin: 1%;
+}
+
+div#prof div input {
+	text-align: center;
+    display: block;
+}
+
+div#prof div label {
+	display: block;
+	text-align: center;
+}
+
+label[for=id_num_dogs] {
+	width: 60% !important; 
+}
+
+#prof, #userinfo {
+	margin: 0 auto;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #007BFF;
+	margin-bottom: 20px;
+}
+
+#prof label{
+	display: block;
+}
+
+#prof fieldset {
+	border: 2px groove threedface;
+	padding: 10px;
+}
+
+#prof legend {
+	width: 20%;
+}
+
+@media only screen and (max-width: 768px) {
+	[id^="dogPic"] {
+		width: 30%;
+		height: 50%;
+	}
+}

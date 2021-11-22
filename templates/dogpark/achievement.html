@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container" id="achievements">
+        <div class="container-fluid" id="achievements">
         {% for item in achievements %}
             <div id="a{{forloop.counter0}}">
                 <p>{{item.goal.description}} {{item.goal.points_earned}}</p>

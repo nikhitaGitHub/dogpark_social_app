@@ -8,18 +8,27 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container" id="friend_list">
-        {% for item in friends %}
-            <div id="f{{forloop.counter0}}">
-            {% if user.id == item.from_friend.id %}
-                <p>{{item.to_friend.first_name}} {{item.to_friend.last_name}} username: {{item.to_friend.username}}</p>
-            {% else %}
-                <p>{{item.from_friend_first_name}} {{item.from_friend_last_name}} username: {{item.from_friend.username}}</p>
-            {% endif %}
-                <p id="successful_request{{forloop.counter0}}">Friends</p>
+        <div class="container-fluid" id="friend_list">
+        {% for item in dogs %}
+            <div id="f{{forloop.counter0}}" class="col-sm-4 d-inline-block">
+                {% if user.id == item.1.id %}
+                    <p class="container">{{item.1.first_name}} {{item.1.last_name }}</p>
+                {% else %}
+                    <p class="container">{{item.1.first_name}} {{item.1.last_name}}</p>
+                {% endif %}
+                {% for dog in item.0 %}
+                    {% if dog.picture %}
+                    <img class="col-sm-4" id="dog{{forloop.counter0}}" src="{{dog.picture.url}}"/>
+                    {% else %}
+                    <img class="col-sm-4" id="dog{{forloop.counter0}}" src={% static 'images/puppy.jpg' %}/>
+                    {% endif %}
+                    <div class="col-sm-8" id="infoDog{{forloop.counter0}}">
+                        <p>{{dog}}</p>
+                    </div>
+                {% endfor %}
             </div>
         {% empty %}
-            <p>You have no friends !</p>
+            <p class="text-center">When you have friend requests or suggestions, you'll see them here.</p>
         {% endfor %}
         </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 from re import U
 from django.core.exceptions import ObjectDoesNotExist
+from django.forms.formsets import formset_factory
 from django.forms.widgets import PasswordInput
 import requests
 from django.shortcuts import render, redirect
@@ -15,10 +16,30 @@ from django.views import View
 from django.urls import reverse
 from django.db.models import Q
 import os
+from django.forms import formset_factory
+
 
 # Create your views here.
 def index(request):
     context_dict = {}
+    checked_in_friends = []
+    u = request.user
+    if not request.user.is_anonymous:
+        friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
+        for x in friends.iterator():
+            if x.from_friend == u:
+                ci_u = x.to_friend
+            else:
+                ci_u = x.from_friend
+            try:
+                if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
+                    checked_in_friends.append(ci_u)
+            except Owner.DoesNotExist:
+                context_dict["my_checked_in_friends"] = checked_in_friends
+                context_dict["u"] = u
+                return render(request, 'dogpark/index.html', context=context_dict)               
+        context_dict["my_checked_in_friends"] = checked_in_friends
+        context_dict["u"] = u
     return render(request, 'dogpark/index.html', context=context_dict)
 
 def user_login(request):
@@ -43,8 +64,13 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('dogpark:index'))
 
-def get_dog_form(request):
-    form = UserProfileForm()
+def get_dog_form(request, num):
+    formset = formset_factory(UserProfileForm, extra=num)
+    data = {
+            'form-TOTAL_FORMS': str(num),
+            'form-INITIAL_FORMS': '0' 
+        }
+    form = formset(data)
     context = {
         "form": form
     }
@@ -53,34 +79,39 @@ def get_dog_form(request):
 
 def register(request):
     registered = False
-    
+    profile_form = []
     if request.method == 'POST':
-        
         user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
-        
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            Owner.get_or_create(user = user, num_dogs = user.num_dogs)
+            num = user_form.cleaned_data['num_dogs']
+            profile_form_set = formset_factory(UserProfileForm, extra=int(num))
+            Owner.objects.get_or_create(user = user, num_dogs = num)
             x = User.objects.get(username=user.username)
-            
-            profile = profile_form.save(commit=False)  
-            #profile_form. = user_form.num_dogs
-            profile.owner = x
-            
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            
-            profile.save()
-            registered = True
+            profile_form = profile_form_set(request.POST)
+            if profile_form.is_valid():
+                for form in profile_form:
+                    profile = form.save(commit=False)  
+                    profile.owner = x
+                    if 'picture' in request.FILES:
+                        profile.picture = request.FILES['picture']
+                    profile.save()
+                else:
+                    print(profile_form.errors)
+                registered = True
         else:
-            print(user_form.errors, profile_form.errors)
-        
+            print(user_form.errors)    
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
+        profile_form_set = formset_factory(UserProfileForm, max_num=5, extra=1)
+        data = {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0' 
+        }
+        profile_form = profile_form_set(data)
+        
     context_dict = {}
     context_dict['user_form'] = user_form
     context_dict['profile_form'] = profile_form
@@ -91,6 +122,8 @@ def register(request):
 @login_required
 def people(request):
     u = request.user
+    num_dogs = []
+    my_list = []
     friends = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
     friend_req = FriendRequest.objects.filter(Q(sender=u) | Q(receiver=u))
     user_list = User.objects.exclude(username=get_user(request))
@@ -98,22 +131,37 @@ def people(request):
         user_list = user_list.filter(~Q(id=x.from_friend.id) & ~Q(id=x.to_friend.id))
     for x in friend_req.iterator():
         user_list = user_list.filter(~Q(id=x.sender.id) & ~Q(id=x.receiver.id))
+    for x in user_list:
+        dog_list = Dog.objects.filter(owner=x)
+        my_list.append((x, dog_list, len(dog_list)))
     context_dict = {}
-    context_dict['user_list'] = user_list
+    context_dict['my_list'] = my_list
     return render(request, 'dogpark/people.html', context=context_dict)
 
 @login_required
 def mypark(request):
     context_dict = {}
+    u = request.user
+    checked_in_friends = []
+    visitors = None
     try:
-        visitors = Owner.objects.filter(checked_in=True).count()
-        current = Owner.objects.get(user=request.user)
+        visitors = Owner.objects.exclude(user=request.user).filter(checked_in=True).count()
+        current = Owner.objects.get(user=u)
+        friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
+        for x in friends.iterator():
+            if x.from_friend == u:
+                ci_u = x.to_friend
+            else:
+                ci_u = x.from_friend
+            if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
+                checked_in_friends.append(ci_u)
     except Owner.DoesNotExist:
-        visitors = None
+        print("Owner does not exist")
     if visitors == None:
         return render(request, 'dogpark/index.html', context=context_dict)
     context_dict['visitors'] = visitors
     context_dict['checked_in'] = current.checked_in
+    context_dict['my_checked_in_friends'] = checked_in_friends
     return render(request, 'dogpark/mypark.html', context=context_dict)
 
 @login_required
@@ -286,14 +334,21 @@ class myFriends(View):
     @method_decorator(login_required)
     def get(self, request):
         context_dict = {}
+        dog_list = []
         u = get_user(request)
         try:
             friendship = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
+            for friend in friendship:
+                if friend.from_friend == u:
+                    dog_list.append((Dog.objects.filter(owner=friend.to_friend), friend.to_friend))
+                else:
+                    dog_list.append((Dog.objects.filter(owner=friend.from_friend), friend.from_friend))
         except Friendship.DoesNotExist:
             friendship = None
         if friendship == None:
             return redirect(reverse('dogpark:index'))
         context_dict['friends'] = friendship
+        context_dict['dogs'] = dog_list
         return render(request,  'dogpark/my_friends.html', context=context_dict)
          
 class SendFriendRequest(View):

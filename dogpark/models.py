@@ -10,7 +10,7 @@ class Owner(models.Model):
     checked_in = models.BooleanField(default=False)
     def __str__(self):
         #return self.user.first_name + 
-        return " is owner of " + self.num_dogs + " dogs"
+        return " is owner  "
     
 class Dog(models.Model):
     GENDER_CHOICES = (
@@ -20,9 +20,9 @@ class Dog(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     breed = models.CharField(max_length = charLen256) 
     name = models.CharField(max_length = charLen100)
-    age = models.IntegerField()
+    age = models.IntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    picture = models.ImageField(upload_to="dog_profile_picture", default="", blank=True)
+    picture = models.ImageField(upload_to="dog_profile_picture", blank=True)
     def __str__(self):
         return self.name + " is a " + self.breed + " and is " + str(self.age) + " years old."
     

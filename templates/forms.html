@@ -1,3 +1,7 @@
-<div>
-    {{form}}
-</div>
+{{ form.management_form }} 
+{% for f in form %}
+<fieldset>
+        <legend>Dog {{forloop.counter}}</legend>
+        {{f}}
+</fieldset>
+{% endfor %}

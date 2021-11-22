@@ -8,12 +8,32 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container" id="people_list">
-        {% for item in user_list %}
-            <div id="u{{forloop.counter0}}">
-                <p>{{item.first_name}} {{item.last_name}} username: {{item.username}}</p>
-                <button id="add_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Add Friend</button>
-                <p id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</p>
+        <div class="container-fluid" id="people_list">
+        {% for item in my_list %}
+            <div id="u{{forloop.counter0}}" class="container">
+                <p>{{item.0.first_name}} {{item.0.last_name}}</p>
+                <p>I have {{item.2}} dogs</p>
+                <div class="row">
+                {% for dog in item.1 %}
+                    <div class="col-md-6 col-lg-4 col-sm-12">
+                        {% if dog.picture %}
+                            <img  id="dogPic{{forloop.counter0}}" src= "{{dog.picture.url}}" class="col-md-4 col-sm-12"/>
+                        {% else %}
+                            <img id="dogPic{{forloop.counter0}}" src={% static 'images/puppy.jpg' %} class="col-md-4 col-sm-12"/>
+                        {% endif %}
+                        {% if dog.gender == 'M' %}
+                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Male {{ dog.breed }} </p>
+                        {% else %}
+                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Female {{ dog.breed }} </p>
+                        {% endif %}
+                    </div>
+                {% empty %}
+
+                {% endfor %} 
+                </div>
+                    <button class="btn btn-primary" id="add_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Add Friend</button>
+                    <p id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</p>
+                    <hr/>               
             </div>
         {% empty %}
         <p>There is nothing to show here. Either you have already sent or received request or are friends already.</p>

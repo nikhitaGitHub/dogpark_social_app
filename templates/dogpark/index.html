@@ -1,4 +1,4 @@
-{% extends 'dogpark/base.html' %}
+{% extends 'dogpark/map.html' %}
 
 {% load staticfiles %}
 
@@ -8,30 +8,63 @@ dogpark
 
 {% block body_block %}
     {% if user.is_authenticated %}
-    <!--<input type="text" placeholder="Search..">-->
-    <a href="{% url 'dogpark:people' %}">Find Friends</a>
-    <a href="{% url 'dogpark:see_friend_requests' %}">Friend Requests</a>
-    <a href="{% url 'dogpark:my_friends' %}">Friends</a>
-    <a href="my pet">My Pet</a>
-    <a href="{% url 'dogpark:mypark' %}">My Park</a>
-    <a href="{% url 'dogpark:achievements' %}">My Achievements</a>
-    <img src={% static 'images/placeholder.png' %}>
-    <!--<button>Notifications</button>-->
-    <button>Settings</button>
-    <a href={% url 'dogpark:logout' %}>logout</a>
+    <nav id="menu_bar" class="navbar navbar-dark navbar-expand-lg bg-primary">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#content-navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="content-navbar-collapse">
+            <ul class="nav navbar-nav pull-left mr-auto">
+                <li><a class="nav-link" href="{% url 'dogpark:people' %}">Find People</a></li>
+                <li><a class="nav-link" href="{% url 'dogpark:see_friend_requests' %}">My friend requests</a></li>
+                <li><a class="nav-link" href="{% url 'dogpark:my_friends' %}">My friends</a></li>
+                <li><a class="nav-link" href="{% url 'dogpark:my_pet' %}">My pet</a></li>
+                <li><a class="nav-link" href="{% url 'dogpark:mypark' %}">My park</a></li>
+                <li><a class="nav-link" href="{% url 'dogpark:achievements' %}">My achievements</a></li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li><a class="nav-link" href="{% url 'dogpark:logout' %}">logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="d-flex flex-row justify-content-center align-content-center" id="greeting">
+        <p>Hi {{u}} !</p>
+    </div>
+    <div class="d-flex flex-row justify-content-center align-content-center" id="notification">
+            {% if my_checked_in_friends %}
+            <span>Your friends&#160</span>
+            {% for item in my_checked_in_friends %}
+                {% if forloop.last %}
+                    <span>and&#160{{item.username}}</span>
+                {% else %}
+                    <span>&#160{{item.username}}&#44&#160</span>
+                {% endif %}
+            {% endfor %}
+            <span>&#160are in the park</span>
+            {% endif %}
+    </div>
+    <div class="d-flex flex-row justify-content-center align-content-center" id="map">
+        <div id="map_canvas" class="container"></div>
+    </div>       
     {% else %}
-    <div class="container text-sm-center" id="contactus">
-        <h1>Please login or register</h1>
-        <form id="login_form" method="post" action="{% url 'dogpark:login' %}">
-            <div class="form-group">
-                {% csrf_token %}
-                Username: <input type="text" name="username" value="" class="form-control" size="50" placeholder="Enter email"/><br />
-                Password: <input type="password" name="password" value="" class="form-control"size="50" placeholder="Enter password"/><br />
-                <input type="submit" name="submit" value="Login"/>
+    <div class="container-fluid d-flex justify-content-center" id="register">
+        <div>
+            <h1 class="text-center">Please login or register</h1>
+            <form id="login_form" method="post" action="{% url 'dogpark:login' %}">
+                <div class="form-group">
+                    {% csrf_token %}
+                    Username: <input type="text" name="username" value="" class="form-control" size="50" placeholder="Enter email"/><br />
+                    Password: <input type="password" name="password" value="" class="form-control"size="50" placeholder="Enter password"/><br />
+                    <input class="btn btn-primary" type="submit" name="submit" value="Login"/>
+                </div>
+            </form>
+            <div>
+                <p>Want to register?</p>
+                <p>
+                    <a href="{% url 'dogpark:register' %}">Register</a>
+                </p>
             </div>
-        </form>
-        <p>Want to register?</p>
-        <a href="{% url 'dogpark:register' %}">Register</a>
+        </div>
     </div>
     {% endif %}
 {% endblock %}

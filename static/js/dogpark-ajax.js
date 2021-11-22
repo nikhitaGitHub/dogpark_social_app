@@ -9,19 +9,20 @@ $(document).ready(function() {
             num_dogs = num_dogs.match(/\d/);
             num_dogs = parseInt(num_dogs[0]);
             var elm = $("#prof");
+            var i = 0;
             var content = null;
 
-            fetch(url)
+            fetch(url+num_dogs+'/')
             .then(function(response) {
                 return response.json();
             })
             .then(function(data) {
                 elm.empty();
-                for(i = 0; i < num_dogs; i++) {
-                    elm.append(data.form);
-                }
-            });  
+                elm.append(data.form);
+            });
+            $('#id_form-TOTAL_FORMS').val(num_dogs);
         });
+
 
         function getCookie(name) {
             var cookieValue = null;
@@ -259,5 +260,43 @@ $(document).ready(function() {
             else if(elm.id.startsWith("remove_goal")) {
                 removeGoal(elm);
             }
-        })
+        });
+
+        $("#checkIn").click(function(index, elm) {
+            var url = '/dogpark/check_in/';
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken
+                    },
+                    success: function(json) {
+                            $('#checkOut').show();
+                            $('#checkIn').hide();
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+                });
+        });
+
+        $("#checkOut").click(function(index, elm) {
+            var url = '/dogpark/check_out/';
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken
+                    },
+                    success: function(json) {
+                            $('#checkIn').show();
+                            $('#checkOut').hide();
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+               }); 
+        });
 });

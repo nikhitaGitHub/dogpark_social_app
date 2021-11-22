@@ -8,20 +8,20 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container" id="friend_request_list">
+        <div class="container-fluid" id="friend_request_list">
         {% if request_exists %}
             {% for item in incoming_requests %}
-                <div id="req{{forloop.counter0}}">
+                <div id="req{{forloop.counter0}}" class="col-sm-4">
                     <p> {{item.sender.username}}</p>
                     <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.sender.username}}>Accept Friend</button>
                     <p id="friends{{forloop.counter0}}" class="hidden">Friends</p>
                 </div>
             {% empty %}
-                <p>Sorry, no requests</p>
+                <p class="text-center">Sorry, no requests</p>
             {% endfor %}
         {% else %}
             <div>
-                <p>You have no requests</p>
+                <p class="text-center">You have no requests</p>
             </div>
         {% endif %}
         </div>
