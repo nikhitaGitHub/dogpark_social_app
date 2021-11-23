@@ -10,22 +10,26 @@
 {% block body_block %}
         <div class="container-fluid" id="friend_list">
         {% for item in dogs %}
-            <div id="f{{forloop.counter0}}" class="col-sm-4 d-inline-block">
+            <div id="f{{forloop.counter0}}" class="col-sm-12 col-md-12 col-lg-12">
                 {% if user.id == item.1.id %}
                     <p class="container">{{item.1.first_name}} {{item.1.last_name }}</p>
                 {% else %}
                     <p class="container">{{item.1.first_name}} {{item.1.last_name}}</p>
                 {% endif %}
+                <div class="row">
                 {% for dog in item.0 %}
+                <div class="col-sm-12 col-md-4">
                     {% if dog.picture %}
-                    <img class="col-sm-4" id="dog{{forloop.counter0}}" src="{{dog.picture.url}}"/>
+                        <img class="col-sm-12 col-md-4" id="dog{{forloop.counter0}}" src="{{dog.picture.url}}"/>
                     {% else %}
-                    <img class="col-sm-4" id="dog{{forloop.counter0}}" src={% static 'images/puppy.jpg' %}/>
+                        <img class="col-sm-12 col-md-4" id="dog{{forloop.counter0}}" src={% static 'images/puppy.jpg' %}/>
                     {% endif %}
-                    <div class="col-sm-8" id="infoDog{{forloop.counter0}}">
-                        <p>{{dog}}</p>
-                    </div>
+                        <div class="col-sm-12 col-md-8" id="infoDog{{forloop.counter0}}">
+                            <p>{{dog}}</p>
+                        </div>
+                </div>
                 {% endfor %}
+                </div>
             </div>
         {% empty %}
             <p class="text-center">When you have friend requests or suggestions, you'll see them here.</p>

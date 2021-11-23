@@ -54,7 +54,9 @@ $(document).ready(function() {
                     },
                     success: function(json) {
                         if(json.response == 1) {
-                            $('#successful_request'+elm.id.match(/\d+$/)).show();
+                            $('#successful_request'+elm.id.match(/\d+$/)).css('display', 'inline-block');
+                            console.log('#confirm'+elm.id.match(/\d+$/));
+                            $('#confirm'+elm.id.match(/\d+$/)).css('display', 'inline-block');
                             $("#"+elm.id).hide();
                         }
                     },
@@ -79,7 +81,8 @@ $(document).ready(function() {
                     },
                     success: function(json) {
                         if(json.response == 1) {
-                            $('#friends'+elm.id.match(/\d+$/)).show();
+                            $('#friends'+elm.id.match(/\d+$/)).css('display', 'inline-block');
+                            $('#confirm'+elm.id.match(/\d+$/)).css('display', 'inline-block');
                             $("#"+elm.id).hide();
                         }
                     },
@@ -105,8 +108,9 @@ $(document).ready(function() {
                     },
                     success: function(json) {
                         if(json.response == 1) {
-                            $('#decline_event'+elm.id.match(/\d+$/)).show();
-                            $('#attending_event'+elm.id.match(/\d+$/)).show();  
+                            $('#decline_event'+elm.id.match(/\d+$/)).css('display', 'inline-block');
+                            $('#attending_event'+elm.id.match(/\d+$/)).css('display', 'inline-block');
+                            $('#confirm'+elm.id.match(/\d+$/)).css('display', 'inline-block'); 
                             $(elmId).hide();
                         }
                     },
@@ -133,6 +137,7 @@ $(document).ready(function() {
                     success: function(json) {
                         if(json.response == 1) {
                             $('#attending_event'+elm.id.match(/\d+$/)).hide();
+                            $('#confirm'+elm.id.match(/\d+$/)).hide();
                             $('#attend_event'+elm.id.match(/\d+$/)).show();
                             $(elmId).hide();
                         }

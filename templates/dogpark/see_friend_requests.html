@@ -11,10 +11,28 @@
         <div class="container-fluid" id="friend_request_list">
         {% if request_exists %}
             {% for item in incoming_requests %}
-                <div id="req{{forloop.counter0}}" class="col-sm-4">
-                    <p> {{item.sender.username}}</p>
-                    <button id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.sender.username}}>Accept Friend</button>
-                    <p id="friends{{forloop.counter0}}" class="hidden">Friends</p>
+                <div id="req{{forloop.counter0}}" class="col-sm-12 col-lg-12">
+                    <p> {{item.0.sender.first_name}} {{item.0.sender.last_name}}</p>
+                    <p>I have {{item.2}} dogs</p>
+                    <div class="row">
+                    {% for dog in item.1 %}
+                            <div class="col-md-6 col-lg-4 col-sm-12">
+                            {% if dog.picture %}
+                                <img  id="dogPic{{forloop.counter0}}" src= "{{item.1.picture.url}}" class="col-md-4 col-sm-12"/>
+                            {% else %}
+                                <img id="dogPic{{forloop.counter0}}" src={% static 'images/puppy.jpg' %} class="col-md-4 col-sm-12"/>
+                            {% endif %}
+                            {% if dog.gender == 'M' %}
+                                <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Male {{ dog.breed }} </p>
+                            {% else %}
+                                <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Female {{ dog.breed }} </p>
+                            {% endif %}
+                            </div>
+                    {% endfor %} 
+                    </div>   
+                        <button class="btn btn-primary" id="accept_friend_btn{{forloop.counter0}}" data-uname={{item.0.sender.username}}>Accept Friend</button>
+                        <p id="friends{{forloop.counter0}}" class="hidden">Friends</p>
+                        <i class="fa fa-check hidden" id="confirm{{forloop.counter0}}"></i> 
                 </div>
             {% empty %}
                 <p class="text-center">Sorry, no requests</p>

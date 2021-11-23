@@ -15,7 +15,7 @@
     {% else %}
     <h1 class="text-center">Register</h1>
     <div class="container-fluid d-flex justify-content-lg-center" id="registeration_form">
-        <form id="register_form" method="post" action="{% url 'dogpark:register' %}">
+        <form id="register_form" method="post" action="{% url 'dogpark:register' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div id="userinfo">
                 {{ user_form.as_p }}

@@ -8,19 +8,25 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container-fluid" id="Events">
+        <div class="container" id="Events">
+            <div class="row d-flex justify-content-center">
             {% for item in events %}
-                <p>{{item.name}}</p>
-                <p>{{item.date}} {{item.time}}</p>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" id="event">
+                <p id="desc">{{item.name}}</p>
+                <p class="date">{{item.date}} {{item.time}}</p>
                 {% if item.attending %}
-                    <button id="attend_event{{forloop.counter0}}" class="hidden" data-elmid="{{item.id}}">Attend</button>
-                    <p id="attending_event{{forloop.counter0}}">Attending</p>
-                    <button id="decline_event{{forloop.counter0}}" data-elmid="{{item.id}}">Decline</button>
+                    <button class= "btn btn-primary hidden" id="attend_event{{forloop.counter0}}" data-elmid="{{item.id}}">Attend</button>
+                    <p id="attending_event{{forloop.counter0}}" class="showing">Attending</p>
+                    <i class="fa fa-check showing" id="confirm{{forloop.counter0}}"></i>
+                    <button class="btn btn-primary pull-right" id="decline_event{{forloop.counter0}}" data-elmid="{{item.id}}">Decline</button>
                 {% else %}
-                    <button id="attend_event{{forloop.counter0}}" data-elmid="{{item.id}}">Attend</button>
+                    <button class="btn btn-primary" id="attend_event{{forloop.counter0}}" data-elmid="{{item.id}}">Attend</button>
                     <p id="attending_event{{forloop.counter0}}" class="hidden">Attending</p>
-                    <button id="decline_event{{forloop.counter0}}" class="hidden" data-elmid="{{item.id}}">Decline</button>
+                    <i class="fa fa-check hidden" id="confirm{{forloop.counter0}}"></i>
+                    <button class="btn btn-primary pull-right hidden" id="decline_event{{forloop.counter0}}" data-elmid="{{item.id}}">Decline</button>
                 {% endif %}
+            </div>
             {% endfor %}
+            </div>
         </div>
 {% endblock %}

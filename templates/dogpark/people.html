@@ -31,8 +31,9 @@
 
                 {% endfor %} 
                 </div>
-                    <button class="btn btn-primary" id="add_friend_btn{{forloop.counter0}}" data-uname={{item.username}}>Add Friend</button>
+                    <button class="btn btn-primary" id="add_friend_btn{{forloop.counter0}}" data-uname={{item.0.username}}>Add Friend</button>
                     <p id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</p>
+                    <i class="fa fa-check hidden" id="confirm{{forloop.counter0}}"></i>
                     <hr/>               
             </div>
         {% empty %}

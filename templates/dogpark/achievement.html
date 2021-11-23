@@ -9,11 +9,32 @@
 
 {% block body_block %}
         <div class="container-fluid" id="achievements">
-        {% for item in achievements %}
-            <div id="a{{forloop.counter0}}">
-                <p>{{item.goal.description}} {{item.goal.points_earned}}</p>
+            <p class="text-center">Your total points is {{total_points}}</p>
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <p class="desc">Goal</p>
+                    {% for item in achievements %}
+                        <div id="g{{forloop.counter0}}">
+                            <p>{{item.goal.description}}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-sm-4 cold-md-4 col-lg-4">
+                    <p class="desc">Points earned</p>
+                    {% for item in achievements %}
+                        <div id="p{{forloop.counter0}}">
+                            <p>{{item.goal.points_earned}}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col-sm-4 cold-md-4 col-lg-4">
+                    <p class="desc">Date</p>
+                    {% for item in achievements %}
+                        <div id="d{{forloop.counter0}}">
+                            <p>{{item.created}}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        {% endfor %}
-        <p>Your total points is {{total_points}}</p>
         </div>
 {% endblock %}

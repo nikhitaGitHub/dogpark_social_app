@@ -57,11 +57,48 @@ nav#menu_bar div {
 [id^="dog"] {
 	width: 25%;
 	height: 25%;
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 [id$="gender"] {
 	width: 60%;
+}
+
+[id^="accept_friend_btn"] {
+	display: block;
+	margin-top: 2%;
+}
+
+#friend_request_list [id^="req"], #friend_list [id^="f"], #event, #goal {
+	margin-top: 2%;
+    border: 2px solid grey;
+    padding-bottom: 1%;
+    border-radius: 25px;
+}
+
+#event {
+	margin-left: 20px;
+}
+
+#friend_list img {
+	width: 25%;
+	height: inherit;
+}
+
+#friend_request_list [id^="req"] .row div {
+	height: 50%;
+}
+
+#friend_request_list [id^="friends"] {
+	font-weight:bold;
+	color: #007BFF;
+	margin-left: 1%;
+	font-size: larger;
+}
+
+#friend_request_list [id^="friends"] i {
+	color: #007BFF;
+	font-size: larger;
 }
 
 [id^="infoDog"] p {
@@ -105,7 +142,7 @@ nav#menu_bar div {
 }
 
 #visitorInfo {
-	padding: 5%;
+	padding: 1%;
 }
 
 #mypark a {
@@ -121,9 +158,9 @@ nav#menu_bar div {
 	margin-top: 1rem;
 }
 
-[id^="dogPic"] {
+#people_list [id^="dogPic"], #friend_request_list [id^="dogPic"] {
 	width: 100%;
-	height: 100%;
+	height: inherit;
 }
 
 form#register_form input {
@@ -217,4 +254,39 @@ label[for=id_num_dogs] {
 		width: 30%;
 		height: 50%;
 	}
+}
+
+[id^="successful_request"] {
+	font-weight: bold;
+	color: #007BFF;
+}
+
+#people_list i  {
+	color: #007BFF;
+}
+
+.desc {
+	margin-top: 2%;
+	font-size: large;
+	font-weight: bold;
+}
+
+[id^="attending_event"].showing {
+	display: inline-block;
+}
+
+[id^="attending_event"] + i {
+	color: #007BFF;
+}
+
+[id^="attending_event"], [id^="goal_completed"] {
+	color: #007BFF;
+}
+
+[id^="attending_event"] + i.showing {
+	display: inline-block;
+}
+
+.date {
+	font-weight: small;
 }

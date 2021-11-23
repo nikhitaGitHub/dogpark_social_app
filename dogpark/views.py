@@ -17,6 +17,7 @@ from django.urls import reverse
 from django.db.models import Q
 import os
 from django.forms import formset_factory
+from django.utils import timezone
 
 
 # Create your views here.
@@ -95,12 +96,13 @@ def register(request):
                 for form in profile_form:
                     profile = form.save(commit=False)  
                     profile.owner = x
-                    if 'picture' in request.FILES:
-                        profile.picture = request.FILES['picture']
-                    profile.save()
-                else:
-                    print(profile_form.errors)
+                    for k in request.FILES.keys():
+                        if k.endswith('picture'):
+                            profile.picture = request.FILES[k]
+                            profile.save()
                 registered = True
+            else:
+                print(profile_form.errors)
         else:
             print(user_form.errors)    
     else:
@@ -258,9 +260,14 @@ def finish_goal(request):
     data = {'response': -1}
     try:
         e = Goals.objects.get(id=int(elm_id))
-        e.complete_goal = True
-        e.points_earned = 50 
+        print(e)
+        e.add_goal = False
+        e.points_earned = 50
         e.save()
+        print("Goal saved")
+        a = Achievement.objects.create(goal=e)
+        print("created achievement")
+        a.save()  
     except Goals.DoesNotExist:
         e = None
     if e == None:
@@ -272,18 +279,15 @@ def achievements(request):
     context_dict = {}
     total_points = 0
     try:
-        g = Goals.objects.filter(complete_goal=True)
-        if g.exists():
-            for x in g.iterator():
-                total_points = total_points + x.points_earned
-                a = Achievement.objects.get_or_create(goal=x)[0]
-                a.save()
-        objs = Achievement.objects.all()
-        context_dict['achievements'] = objs.order_by("created")
+        a = Achievement.objects.all()
+        if a.exists():
+            for x in a.iterator():
+                total_points = total_points + x.goal.points_earned
+        context_dict['achievements'] = a.order_by("created")
         context_dict['total_points'] = total_points
     except Achievement.DoesNotExist:
-        objs = None
-    if objs == None:
+        a = None
+    if a == None:
         return render(request, 'dogpark/index.html', context=context_dict)
     return render(request, 'dogpark/achievement.html', context=context_dict)
 
@@ -305,6 +309,7 @@ class seeFriendRequests(View):
         context_dict = {}
         my_requests = None
         already_friends = None
+        my_list = []
         fr = True
         u = get_user(request)
         if not request.user.is_anonymous:
@@ -326,7 +331,10 @@ class seeFriendRequests(View):
                 request_exists = False
             else:
                 request_exists = True
-            context_dict['incoming_requests'] = my_requests
+                for x in my_requests:
+                    dog_list = Dog.objects.filter(owner=x.sender)
+                    my_list.append((x, dog_list, len(dog_list)))
+            context_dict['incoming_requests'] = my_list
             context_dict['request_exists'] = request_exists
             return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
     

@@ -8,25 +8,37 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container-fluid justify-content-lg-center d-flex" id="mypark">
-            <div class="text-center">
-                <img id="img_logo" src="{% static 'images/puppy.jpg' %}" alt="Picture of mypark"/>
-                {% if checked_in %}
-                    <div class="d-block">
-                        <button class="btn btn-primary hidden" id="checkIn" class="hidden">Check in</button>
-                        <button class="btn btn-primary" id="checkOut">Check out</button>
-                    </div>
-                    <p class="text-center" id="visitorInfo">There are {{visitors}} other visitors in the park</p>
-                {% else %}
-                    <div class="d-block">
+        <div class="container" id="mypark">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    <img id="img_logo" src="{% static 'images/puppy.jpg' %}" alt="Picture of mypark"/>
+                </div>
+            </div>
+            {% if checked_in %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    <button class="btn btn-primary hidden" id="checkIn" class="hidden">Check in</button>
+                    <button class="btn btn-primary" id="checkOut">Check out</button>
+                </div>
+            </div>
+            <div class="row">
+                <p class="col-sm-12 col-md-12 col-lg-12 text-center" id="visitorInfo">There are {{visitors}} other visitors in the park</p>
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
                         <button class="btn btn-primary" id="checkIn">Check in</button>
                         <button class="btn btn-primary hidden" id="checkOut">Check out</button>
-                    </div>
-                    <p id="visitorInfo">There are {{visitors}} visitors in the park</p>
-                {% endif %}
-                <div>
-                    <li class="btn btn-primary d-inline-block "><a href="{% url 'dogpark:park_events' %}">Park Events</a></li>
-                    <li class="btn btn-primary d-inline-block"><a href="{% url 'dogpark:park_goals' %}">Park Goals</a></li>
+                </div>
+            </div>
+            <div class="row">
+                <p class="col-sm-12 col-md-12 col-lg-12 text-center" id="visitorInfo">There are {{visitors}} visitors in the park</p>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    <li class="btn btn-primary d-inline-block col-xs-5"><a href="{% url 'dogpark:park_events' %}">Park Events</a></li>
+                    <li class="btn btn-primary d-inline-block col-xs-5"><a href="{% url 'dogpark:park_goals' %}">Park Goals</a></li>
                 </div>
             </div>
         </div>
