@@ -6,7 +6,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, Events, Achievement
+from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, Events, Achievement, Ratings
 from dogpark.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user
@@ -252,7 +252,17 @@ def remove_goal(request):
     if e == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})
-    
+ 
+@login_required
+def rating(request):
+    rating = request.POST.get('rating')
+    data = {'response': -1}
+    try:
+        Ratings.objects.create(rating=rating, owner=request.user)
+    except Ratings.DoesNotExist:
+        print("DB no exist")        
+    return JsonResponse({'response': 1})
+
 @login_required
 def finish_goal(request):
     context_dict = {}
@@ -260,13 +270,10 @@ def finish_goal(request):
     data = {'response': -1}
     try:
         e = Goals.objects.get(id=int(elm_id))
-        print(e)
         e.add_goal = False
         e.points_earned = 50
         e.save()
-        print("Goal saved")
         a = Achievement.objects.create(goal=e)
-        print("created achievement")
         a.save()  
     except Goals.DoesNotExist:
         e = None

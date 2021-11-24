@@ -286,6 +286,26 @@ $(document).ready(function() {
                 });
         });
 
+        $("#ratingClose").click(function(){
+            var url= '/dogpark/rating/';
+            var csrftoken = getCookie('csrftoken');
+            var rating = $("input[type='radio']:checked").val();
+            $.ajax({
+                url:url,
+                type: "POST",
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    rating: rating
+                },
+                success: function(json) {
+
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log(xhr.status+ ": "+xhr.responseText)
+                }
+            });
+        });
+
         $("#checkOut").click(function(index, elm) {
             var url = '/dogpark/check_out/';
             var csrftoken = getCookie('csrftoken');

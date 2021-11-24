@@ -137,8 +137,8 @@ nav#menu_bar div {
 
 #img_logo {
 	padding: 2%;
-	width: 80%;
-	height: 350px;
+	width: 40%;
+	height: 400px;
 }
 
 #visitorInfo {
@@ -289,4 +289,12 @@ label[for=id_num_dogs] {
 
 .date {
 	font-weight: small;
+}
+
+i.fa.fa-star-o {
+    font-size: xx-large;
+}
+
+.modal-body {
+	text-align: center;
 }

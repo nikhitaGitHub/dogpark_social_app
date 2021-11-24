@@ -1,8 +1,8 @@
 function initialize() {
   var map;
   var mapOptions = {
-	zoom: 12,
-	  center: new google.maps.LatLng(55.85361568022353, -4.288761402220929)
+	zoom: 28,
+	  center: new google.maps.LatLng(55.85365783555865, -4.288739944549508)
   };
   map = new google.maps.Map(document.getElementById('map_canvas'), 
 							mapOptions);
@@ -16,4 +16,3 @@ function loadTheMap() {
 };
 
 window.onload = loadTheMap;
-/*google.maps.event.addDomListener(window, 'load', initialize);*/

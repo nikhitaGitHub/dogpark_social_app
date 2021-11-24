@@ -11,14 +11,14 @@
         <div class="container" id="mypark">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 text-center">
-                    <img id="img_logo" src="{% static 'images/puppy.jpg' %}" alt="Picture of mypark"/>
+                    <img id="img_logo" src="{% static 'images/CessnockPacific.jpeg' %}" alt="Picture of mypark"/>
                 </div>
             </div>
             {% if checked_in %}
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 text-center">
                     <button class="btn btn-primary hidden" id="checkIn" class="hidden">Check in</button>
-                    <button class="btn btn-primary" id="checkOut">Check out</button>
+                    <button class="btn btn-primary" id="checkOut" data-toggle="modal" data-target="#ratingModal">Check out</button>
                 </div>
             </div>
             <div class="row">
@@ -27,8 +27,8 @@
             {% else %}
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 text-center">
-                        <button class="btn btn-primary" id="checkIn">Check in</button>
-                        <button class="btn btn-primary hidden" id="checkOut">Check out</button>
+                    <button class="btn btn-primary" id="checkIn">Check in</button>
+                    <button class="btn btn-primary hidden" id="checkOut" data-toggle="modal" data-target="#ratingModal">Check out</button>
                 </div>
             </div>
             <div class="row">
@@ -39,6 +39,30 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 text-center">
                     <li class="btn btn-primary d-inline-block col-xs-5"><a href="{% url 'dogpark:park_events' %}">Park Events</a></li>
                     <li class="btn btn-primary d-inline-block col-xs-5"><a href="{% url 'dogpark:park_goals' %}">Park Goals</a></li>
+                </div>
+            </div>
+            <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ratingModalLabel">Rate your experience</h5>
+                            <button id="ratingClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="radio" id="star1" name="rate" value="1"/>
+                            <i class="fa fa-star-o" aria-hidden=true></i>
+                            <input type="radio" id="star2" name="rate" value="2"/>
+                            <i class="fa fa-star-o" aria-hidden=true></i>
+                            <input type="radio" id="star3" name="rate" value="3"/>
+                            <i class="fa fa-star-o" aria-hidden=true></i>
+                            <input type="radio" id="star4" name="rate" value="4"/>
+                            <i class="fa fa-star-o" aria-hidden=true></i>
+                            <input type="radio" id="star5" name="rate" value="5"/>
+                            <i class="fa fa-star-o" aria-hidden=true></i>      
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

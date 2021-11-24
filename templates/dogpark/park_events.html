@@ -12,7 +12,7 @@
             <div class="row d-flex justify-content-center">
             {% for item in events %}
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" id="event">
-                <p id="desc">{{item.name}}</p>
+                <p class="desc">{{item.name}}</p>
                 <p class="date">{{item.date}} {{item.time}}</p>
                 {% if item.attending %}
                     <button class= "btn btn-primary hidden" id="attend_event{{forloop.counter0}}" data-elmid="{{item.id}}">Attend</button>
