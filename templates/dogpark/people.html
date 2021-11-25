@@ -11,7 +11,7 @@
         <div class="container-fluid" id="people_list">
         {% for item in my_list %}
             <div id="u{{forloop.counter0}}" class="container">
-                <p>{{item.0.first_name}} {{item.0.last_name}}</p>
+                <h5>Owner's name: {{item.0.first_name}} {{item.0.last_name}}</h5>
                 <p>I have {{item.2}} dogs</p>
                 <div class="row">
                 {% for dog in item.1 %}
@@ -35,9 +35,9 @@
                     <p id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</p>
                     <i class="fa fa-check hidden" id="confirm{{forloop.counter0}}"></i>
                     <hr/>               
-            </div>
+                </div>
         {% empty %}
-        <p>There is nothing to show here. Either you have already sent or received request or are friends already.</p>
+            <p>There is nothing to show here. Either you have already sent or received request or are friends already.</p>
         {% endfor %}
         </div>
 {% endblock %}

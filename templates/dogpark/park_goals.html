@@ -14,12 +14,12 @@
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="goal">
                 <p class="desc">{{item.description}}</p>
                 <p >You will earn {{item.points_earned}} points</p>
-                {% if item.complete_goal %}
+                {% if item in completed %}
                     <button id="finish_goal{{forloop.counter0}}" class="btn btn-primary hidden pull-left" data-goalid="{{item.id}}">Goal Complete</button>
                     <button id="remove_goal{{forloop.counter0}}" class="btn btn-primary hidden pull-right" data-goalid="{{item.id}}">Remove Goal</button>
                     <button id="add_goal{{forloop.counter0}}" data-goalid="{{item.id}}" class="btn btn-primary">Add Goal</button>
                     <p id="goal_completed{{forloop.counter0}}" class="hidden">Goal completed</p>
-                {% elif item.add_goal %}
+                {% elif item in mygoal %}
                     <button class="btn btn-primary pull-left" id="finish_goal{{forloop.counter0}}" data-goalid="{{item.id}}">Goal Complete</button>
                     <button class="btn btn-primary pull-right" id="remove_goal{{forloop.counter0}}" data-goalid="{{item.id}}">Remove Goal</button>
                     <button class="btn btn-primary hidden" id="add_goal{{forloop.counter0}}" data-goalid="{{item.id}}">Add Goal</button>

@@ -6,7 +6,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
-from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, Events, Achievement, Ratings
+from dogpark.models import Friendship, Owner, Dog, FriendRequest, Goals, MyGoal, Events, MyEvents, Achievement, Ratings
 from dogpark.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user
@@ -96,6 +96,8 @@ def register(request):
                 for form in profile_form:
                     profile = form.save(commit=False)  
                     profile.owner = x
+                    print("@@@@@@@222", profile.get_breed_display())
+                    print("###########", form.fields['breed'].choices)
                     for k in request.FILES.keys():
                         if k.endswith('picture'):
                             profile.picture = request.FILES[k]
@@ -146,6 +148,7 @@ def mypark(request):
     u = request.user
     checked_in_friends = []
     visitors = None
+    superuser = u
     try:
         visitors = Owner.objects.exclude(user=request.user).filter(checked_in=True).count()
         current = Owner.objects.get(user=u)
@@ -158,8 +161,8 @@ def mypark(request):
             if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
                 checked_in_friends.append(ci_u)
     except Owner.DoesNotExist:
-        print("Owner does not exist")
-    if visitors == None:
+        superuser= None
+    if visitors == None or superuser == None:
         return render(request, 'dogpark/index.html', context=context_dict)
     context_dict['visitors'] = visitors
     context_dict['checked_in'] = current.checked_in
@@ -170,9 +173,14 @@ def mypark(request):
 def park_events(request):
     if request.method == "GET":
         context_dict = {}
+        eventslist = []
         try:
             events=Events.objects.all()
+            myevents = MyEvents.objects.filter(owner=request.user)
+            for x in myevents.iterator():
+                eventslist.append(getattr(x, 'myevent'))
             context_dict['events'] = events
+            context_dict['myevents'] = eventslist
         except Events.DoesNotExist:
             events = None
         if events == None:
@@ -184,9 +192,19 @@ def park_events(request):
 @login_required
 def park_goals(request):
     context_dict = {}
+    mygoals = []
+    my_achievements = []
     try:
         goals = Goals.objects.all()
+        mygoal = MyGoal.objects.filter(owner=request.user)
+        for x in mygoal.iterator():
+            mygoals.append(getattr(x, 'goal'))   
+        a = Achievement.objects.filter(owner=request.user)
+        for x in a:
+            my_achievements.append(getattr(x, 'goal'))
         context_dict['goals'] = goals
+        context_dict['mygoal']  = mygoals
+        context_dict['completed'] = my_achievements
     except Goals.DoesNotExist:
         goals = None
     if goals == None:
@@ -200,11 +218,11 @@ def attend_event(request):
     data = {'response': -1}
     try:
         e = Events.objects.get(id=int(elm_id))
-        e.attending = True 
-        e.save()
-    except Events.DoesNotExist:   
+        me = MyEvents.objects.get_or_create(myevent=e, owner=request.user)[0]
+    except Events.DoesNotExist or ValueError:   
         e = None
-    if e == None:
+        me = None
+    if e == None or me == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})
     
@@ -215,8 +233,8 @@ def decline_event(request):
     data = {'response': -1}
     try:
         e = Events.objects.get(id=int(elm_id))
-        e.attending = False 
-        e.save()
+        me = MyEvents.objects.get(myevent= e, owner= request.user) 
+        me.delete()
     except Events.DoesNotExist:
         e = None
     if e == None:
@@ -230,8 +248,7 @@ def add_goal(request):
     data = {'response': -1}
     try:
         e = Goals.objects.get(id=int(elm_id))
-        e.add_goal = True 
-        e.save()
+        MyGoal.objects.create(goal=e, owner=request.user)
     except Goals.DoesNotExist:
         e = None
     if e == None:
@@ -245,7 +262,7 @@ def remove_goal(request):
     data = {'response': -1}
     try:
         e = Goals.objects.get(id=int(elm_id))
-        e.add_goal = False 
+        MyGoal.objects.get(goal=e, owner=request.user).delete()
         e.save()
     except Goals.DoesNotExist:
         e = None
@@ -270,11 +287,8 @@ def finish_goal(request):
     data = {'response': -1}
     try:
         e = Goals.objects.get(id=int(elm_id))
-        e.add_goal = False
-        e.points_earned = 50
-        e.save()
-        a = Achievement.objects.create(goal=e)
-        a.save()  
+        a = Achievement.objects.create(goal=e, owner=request.user)
+        MyGoal.objects.get(goal=e, owner=request.user).delete()
     except Goals.DoesNotExist:
         e = None
     if e == None:
@@ -286,7 +300,7 @@ def achievements(request):
     context_dict = {}
     total_points = 0
     try:
-        a = Achievement.objects.all()
+        a = Achievement.objects.filter(owner=request.user)
         if a.exists():
             for x in a.iterator():
                 total_points = total_points + x.goal.points_earned

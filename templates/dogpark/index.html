@@ -28,21 +28,28 @@ dogpark
         </div>
     </nav>
     <div class="d-flex flex-row justify-content-center align-content-center" id="greeting">
-        <p>Hi {{u}} !</p>
+        <h3>Hi {{u}} !</h3>
     </div>
     <div class="d-flex flex-row justify-content-center align-content-center" id="notification">
             {% if my_checked_in_friends %}
-            <span>Your friends&#160</span>
-            {% for item in my_checked_in_friends %}
-                {% if forloop.last %}
-                    <span>and&#160{{item.username}}</span>
+                {% if my_checked_in_friends|length == 1 %}
+                    <h5>Your friend&#160</h5>
+                    <h5>{{my_checked_in_friends.0.first_name}} {{my_checked_in_friends.0.last_name}}</h5>
+                    <h5>&#160is in the park</h5>
                 {% else %}
-                    <span>&#160{{item.username}}&#44&#160</span>
+                    {% for item in my_checked_in_friends %}
+                        <h5>Your friends&#160</h5>
+                        {% if forloop.last %}
+                            <h5>and&#160{{item.first_name}} {{item.last_name}}</h5>
+                        {% else %}
+                            <h5>&#160{{item.first_name}} {{item.last_name}}&#44&#160</h5>
+                        {% endif %}
+                    {% endfor %}
+                    <h5>&#160are in the park</h5>
                 {% endif %}
-            {% endfor %}
-            <span>&#160are in the park</span>
             {% endif %}
     </div>
+    <h5 class="text-center">Your dog park is Cessnock Pacific</h5>
     <div class="d-flex flex-row justify-content-center align-content-center" id="map">
         <div id="map_canvas" class="container"></div>
     </div>       

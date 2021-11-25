@@ -1,7 +1,7 @@
 {% extends 'dogpark/base.html' %}
 {% load static %}
 {% block title_block %}
-    search people
+    My friend requests
 {% endblock %}
 
 {% block header_block %}
@@ -12,7 +12,7 @@
         {% if request_exists %}
             {% for item in incoming_requests %}
                 <div id="req{{forloop.counter0}}" class="col-sm-12 col-lg-12">
-                    <p> {{item.0.sender.first_name}} {{item.0.sender.last_name}}</p>
+                    <p> Owner's name : {{item.0.sender.first_name}} {{item.0.sender.last_name}}</p>
                     <p>I have {{item.2}} dogs</p>
                     <div class="row">
                     {% for dog in item.1 %}

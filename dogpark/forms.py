@@ -18,7 +18,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     gender = forms.ChoiceField(choices=Dog.GENDER_CHOICES, widget=forms.Select(attrs={'class': "custom-select"}))
     age = forms.NumberInput(attrs={'required':True})
-    breed = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Enter breed'}))
+    breed = forms.ChoiceField(choices=Dog.BREED_CHOICES, widget=forms.Select(attrs={'class': "custom-select"}))
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'dog\'s name'}))
     class Meta:
         model = Dog

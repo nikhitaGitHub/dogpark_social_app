@@ -1,3 +1,7 @@
+body {
+	font-size: 18px;
+}
+
 .hidden {
     display:none;
 }
@@ -18,14 +22,21 @@ nav#menu_bar ul li {
 	padding-right:20px;
 }
 
+#checkIn{
+	width: 30%;
+}
+
+#mypark button {
+	font-size: 20px;
+}
+
 nav#menu_bar ul li a {
 	color: #FFFFFF;
-	font-size: 14px;
+	font-size: 16px;
 }
 
 nav#menu_bar ul li a:hover{
-	color: #FAF9F6;
-	background-color: #6495ED;
+	color: #0a2351;
 	height: inherit;
 	width: inherit;
 }
@@ -45,13 +56,12 @@ nav#menu_bar div {
 #menu_basic a {
 	text-decoration: none;
 	color:#FFFFFF;
-	font-size: 14px;
+	font-size: 16px;
 	padding: 1em;
 }
 
 #menu_basic a:hover {
-	color: #FAF9F6;
-	background-color: #6495ED;
+	color: #0a2351;
 }
 
 [id^="dog"] {
@@ -60,7 +70,7 @@ nav#menu_bar div {
 	vertical-align: top;
 }
 
-[id$="gender"] {
+[id$="gender"], [id$="breed"]{
 	width: 60%;
 }
 
@@ -145,6 +155,11 @@ nav#menu_bar div {
 	padding: 1%;
 }
 
+#people_list h5 {
+	font-size: 18px;
+	font-weight: bolder;
+}
+
 #mypark a {
 	color: #FFFFFF;
 }
@@ -153,13 +168,17 @@ nav#menu_bar div {
 	text-decoration: transparent;
 }
 
+#mypark .row a {
+	font-size:20px;
+}
+
 [id^=add_friend_btn] {
 	display: block;
 	margin-top: 1rem;
 }
 
 #people_list [id^="dogPic"], #friend_request_list [id^="dogPic"] {
-	width: 100%;
+	width: 50%;
 	height: inherit;
 }
 
