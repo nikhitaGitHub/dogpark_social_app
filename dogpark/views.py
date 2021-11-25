@@ -96,8 +96,7 @@ def register(request):
                 for form in profile_form:
                     profile = form.save(commit=False)  
                     profile.owner = x
-                    print("@@@@@@@222", profile.get_breed_display())
-                    print("###########", form.fields['breed'].choices)
+                    print("@@@@@@@222",profile.get_breed_display())
                     for k in request.FILES.keys():
                         if k.endswith('picture'):
                             profile.picture = request.FILES[k]
@@ -311,18 +310,6 @@ def achievements(request):
     if a == None:
         return render(request, 'dogpark/index.html', context=context_dict)
     return render(request, 'dogpark/achievement.html', context=context_dict)
-
-@login_required
-def my_pet(request):
-    context_dict = {}
-    try:
-        my_pets = Dog.objects.filter(owner_id=request.user.id)
-    except Dog.DoesNotExist:
-        my_pets = None
-    context_dict['my_pets'] = my_pets
-    if my_pets == None:
-        return render(request, 'dogpark/index.html', context=context_dict)
-    return render(request, 'dogpark/my_pet.html', context=context_dict)
         
 class seeFriendRequests(View):
     @method_decorator(login_required)
