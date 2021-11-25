@@ -96,7 +96,7 @@ def register(request):
                 for form in profile_form:
                     profile = form.save(commit=False)  
                     profile.owner = x
-                    print("@@@@@@@222",profile.get_breed_display())
+                    profile.breedname = profile.get_breed_display()
                     for k in request.FILES.keys():
                         if k.endswith('picture'):
                             profile.picture = request.FILES[k]

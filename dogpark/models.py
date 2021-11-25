@@ -242,12 +242,13 @@ class Dog(models.Model):
     
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     breed = models.IntegerField(choices=BREED_CHOICES, default=1) 
+    breedname = models.CharField(max_length=charLen256)
     name = models.CharField(max_length = charLen100)
     age = models.IntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     picture = models.ImageField(upload_to="dog_profile_picture", blank=True)
     def __str__(self):
-        return self.name + " is a " + self.breed + " and is " + str(self.age) + " years old."
+        return self.name + " is a " + self.breedname + " and is " + str(self.age) + " years old."
     
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='the_sender',on_delete=models.CASCADE)

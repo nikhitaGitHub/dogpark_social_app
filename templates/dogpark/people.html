@@ -22,9 +22,9 @@
                             <img id="dogPic{{forloop.counter0}}" src={% static 'images/puppy.jpg' %} class="col-md-4 col-sm-12"/>
                         {% endif %}
                         {% if dog.gender == 'M' %}
-                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Male {{ dog.breed }} </p>
+                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Male {{ dog.breedname }} </p>
                         {% else %}
-                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Female {{ dog.breed }} </p>
+                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Female {{ dog.breedname }} </p>
                         {% endif %}
                     </div>
                 {% empty %}

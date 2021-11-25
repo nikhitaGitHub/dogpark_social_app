@@ -18,7 +18,7 @@
                     {% for dog in item.1 %}
                             <div class="col-md-6 col-lg-4 col-sm-12">
                             {% if dog.picture %}
-                                <img  id="dogPic{{forloop.counter0}}" src= "{{item.1.picture.url}}" class="col-md-4 col-sm-12"/>
+                                <img  id="dogPic{{forloop.counter0}}" src= "{{dog.picture.url}}" class="col-md-4 col-sm-12"/>
                             {% else %}
                                 <img id="dogPic{{forloop.counter0}}" src={% static 'images/puppy.jpg' %} class="col-md-4 col-sm-12"/>
                             {% endif %}
