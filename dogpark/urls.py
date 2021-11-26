@@ -25,5 +25,6 @@ urlpatterns = [
     path('achievements/', views.achievements, name="achievements"),
     path('check_in/', views.check_in.as_view(), name="check_in"),
     path('check_out/', views.check_out.as_view(), name="check_out"),
-    path('rating/', views.rating, name="rating")
+    path('rating/', views.rating, name="rating"),
+    path('my_pet/', views.my_pet, name="my_pet")
 ]

@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container-fluid" id="friend_request_list">
+{% include 'dogpark/navbar.html' %}
+        <div class="container" id="friend_request_list">
         {% if request_exists %}
             {% for item in incoming_requests %}
                 <div id="req{{forloop.counter0}}" class="col-sm-12 col-lg-12">

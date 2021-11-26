@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function() {   
     const url = "dogregisterform/";
     /* Select num dogs to be just one */
     var num_dogs = 1;

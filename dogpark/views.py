@@ -19,28 +19,58 @@ import os
 from django.forms import formset_factory
 from django.utils import timezone
 
+def find_checked_in_friends(u):
+    checked_in_friends = []
+    friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
+    for x in friends.iterator():
+        if x.from_friend == u:
+            ci_u = x.to_friend
+        else:
+            ci_u = x.from_friend
+        try:
+            if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
+                checked_in_friends.append(ci_u)
+        except Owner.DoesNotExist:
+            pass
+    return checked_in_friends
+        
+#Helper function 
+def helper_index(request, in_proximity):
+    u = request.user
+    context_dict = {}
+    checked_in_friends = find_checked_in_friends(u)
+    try:
+        visitors = Owner.objects.exclude(user=u).filter(checked_in=True).count()
+    except:
+        visitors = 0  
+    context_dict["visitors"] = visitors     
+    context_dict["my_checked_in_friends"] = checked_in_friends
+    context_dict["u"] = u
+    context_dict['in_proximity'] = in_proximity
+    return context_dict 
 
 # Create your views here.
 def index(request):
+    in_proximity = False
     context_dict = {}
     checked_in_friends = []
     u = request.user
     if not request.user.is_anonymous:
-        friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
-        for x in friends.iterator():
-            if x.from_friend == u:
-                ci_u = x.to_friend
+        if request.method == 'POST' :
+            in_proximity = request.POST.get('in_proximity')
+            if(in_proximity == False):
+                context_dict = helper_index(request, False)
             else:
-                ci_u = x.from_friend
-            try:
-                if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
-                    checked_in_friends.append(ci_u)
-            except Owner.DoesNotExist:
-                context_dict["my_checked_in_friends"] = checked_in_friends
-                context_dict["u"] = u
-                return render(request, 'dogpark/index.html', context=context_dict)               
-        context_dict["my_checked_in_friends"] = checked_in_friends
-        context_dict["u"] = u
+                try:
+                    current = Owner.objects.get(user=u)
+                    context_dict['checked_in'] = current.checked_in
+                except:
+                    context_dict['checked_in'] = False
+                context_dict['in_proximity'] = True 
+                return render(request, 'dogpark/index_close.html', context=context_dict)
+        else:
+            context_dict = helper_index(request, False)
+  
     return render(request, 'dogpark/index.html', context=context_dict)
 
 def user_login(request):
@@ -143,30 +173,19 @@ def people(request):
 
 @login_required
 def mypark(request):
+    return render(request, 'dogpark/mypark.html')
+
+@login_required
+def my_pet(request):
     context_dict = {}
-    u = request.user
-    checked_in_friends = []
-    visitors = None
-    superuser = u
     try:
-        visitors = Owner.objects.exclude(user=request.user).filter(checked_in=True).count()
-        current = Owner.objects.get(user=u)
-        friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
-        for x in friends.iterator():
-            if x.from_friend == u:
-                ci_u = x.to_friend
-            else:
-                ci_u = x.from_friend
-            if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
-                checked_in_friends.append(ci_u)
-    except Owner.DoesNotExist:
-        superuser= None
-    if visitors == None or superuser == None:
+        my_pets = Dog.objects.filter(owner_id=request.user.id)
+    except Dog.DoesNotExist:
+        my_pets = None
+    context_dict['my_pets'] = my_pets
+    if my_pets == None:
         return render(request, 'dogpark/index.html', context=context_dict)
-    context_dict['visitors'] = visitors
-    context_dict['checked_in'] = current.checked_in
-    context_dict['my_checked_in_friends'] = checked_in_friends
-    return render(request, 'dogpark/mypark.html', context=context_dict)
+    return render(request, 'dogpark/my_pet.html', context=context_dict)
 
 @login_required
 def park_events(request):

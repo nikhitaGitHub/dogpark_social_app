@@ -8,50 +8,46 @@ dogpark
 
 {% block body_block %}
     {% if user.is_authenticated %}
-    <nav id="menu_bar" class="navbar navbar-dark navbar-expand-lg bg-primary">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#content-navbar-collapse" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="content-navbar-collapse">
-            <ul class="nav navbar-nav pull-left mr-auto">
-                <li><a class="nav-link" href="{% url 'dogpark:people' %}">Find People</a></li>
-                <li><a class="nav-link" href="{% url 'dogpark:see_friend_requests' %}">My friend requests</a></li>
-                <li><a class="nav-link" href="{% url 'dogpark:my_friends' %}">My friends</a></li>
-                <li><a class="nav-link" href="{% url 'dogpark:mypark' %}">My park</a></li>
-                <li><a class="nav-link" href="{% url 'dogpark:achievements' %}">My achievements</a></li>
-            </ul>
-            <ul class="nav navbar-nav pull-right">
-                <li><a class="nav-link" href="{% url 'dogpark:logout' %}">logout</a></li>
-            </ul>
+    {% include 'dogpark/navbar.html' %}
+    <div class="contianer" id="greet_notify_visitinfo">
+        <div class="d-flex flex-row justify-content-center align-content-center" id="greeting">
+            <h3>Hi {{u}} !</h3>
         </div>
-    </nav>
-    <div class="d-flex flex-row justify-content-center align-content-center" id="greeting">
-        <h3>Hi {{u}} !</h3>
-    </div>
-    <div class="d-flex flex-row justify-content-center align-content-center" id="notification">
-            {% if my_checked_in_friends %}
-                {% if my_checked_in_friends|length == 1 %}
-                    <h5>Your friend&#160</h5>
-                    <h5>{{my_checked_in_friends.0.first_name}} {{my_checked_in_friends.0.last_name}}</h5>
-                    <h5>&#160is in the park</h5>
+        <div>
+            <img id="img_logo" src="{% static 'images/CessnockPacific.jpeg' %}" alt="Picture of mypark"/>
+        </div>
+        <div class="d-flex flex-row justify-content-center align-content-center" id="visitorInfo">
+            <h5 class="col-sm-12 col-md-12 col-lg-12 text-center" >There are {{visitors}} active dogs at the park!</h5>
+        </div>
+        <div class="d-flex flex-row justify-content-center text-center" id="notification">   
+                {% if my_checked_in_friends %}
+                    {% if my_checked_in_friends|length == 1 %}
+                        <h5>Your friend&#160</h5>
+                        <h5>{{my_checked_in_friends.0.first_name}} {{my_checked_in_friends.0.last_name}}</h5>
+                        <h5>&#160is currently playing</h5>
+                    {% else %}
+                        {% for item in my_checked_in_friends %}
+                            <h5>Your friends&#160</h5>
+                            {% if forloop.last %}
+                                <h5>and&#160{{item.first_name}} {{item.last_name}}</h5>
+                            {% else %}
+                                <h5>&#160{{item.first_name}} {{item.last_name}}&#44&#160</h5>
+                            {% endif %}
+                        {% endfor %}
+                        <h5>&#160are currently playing/h5>
+                    {% endif %}
                 {% else %}
-                    {% for item in my_checked_in_friends %}
-                        <h5>Your friends&#160</h5>
-                        {% if forloop.last %}
-                            <h5>and&#160{{item.first_name}} {{item.last_name}}</h5>
-                        {% else %}
-                            <h5>&#160{{item.first_name}} {{item.last_name}}&#44&#160</h5>
-                        {% endif %}
-                    {% endfor %}
-                    <h5>&#160are in the park</h5>
+                    <h5>None of your friends are at the park at the moment</h5>
                 {% endif %}
-            {% endif %}
-    </div>
-    <h5 class="text-center">Your dog park is Cessnock Pacific</h5>
-    <div class="d-flex flex-row justify-content-center align-content-center" id="map">
-        <div id="map_canvas" class="container"></div>
-    </div>       
+        </div>
+        <div class="col-sm-12 col-xs-12  justify-content-center d-flex" id="btns">
+            <div class="white-shade">
+                <a class="col-sm-6 col-xs-6" href="{% url 'dogpark:mypark' %}">My park</a>
+                <a class="col-sm-6 col-xs-6" href="{% url 'dogpark:my_pet' %}">My pet</a>
+                <a class="col-sm-6 col-xs-6" href="#">Settings</a>
+            </div>
+        </div>
+    <div>
     {% else %}
     <div class="container-fluid d-flex justify-content-center" id="register">
         <div>

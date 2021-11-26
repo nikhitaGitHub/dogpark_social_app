@@ -1,0 +1,36 @@
+{% extends 'dogpark/base.html' %}
+{% load static %}
+{% block title_block %}
+    search people
+{% endblock %}
+
+{% block header_block %}
+{% endblock %}
+
+{% block body_block %}
+{% include 'dogpark/navbar.html' %}
+        <div class="container" id="my_pet">
+            {% for item in my_pets %}
+                <div class="row col-xs-12 col-sm-12">
+                    <p>{{item}}</p>
+                </div>
+                <div class ="row col-xs-12 col-sm-12">
+                    {% if item.picture %}
+                        <img id="dogpic{{forloop.counter0}}" src="{{item.picture.url}}"/>
+                    {% else %}
+                        <img id="dogpic{{forloop.counter0}}" src={% static 'images/puppy.jpg' %} />
+                    {% endif %}
+                </div>
+                <div class="row col-xs-12 col-sm-12">
+                    <button>
+                        <i class="fa fa-edit" aria-hidden=true></i>
+                    </button>
+                    <button>
+                        <i class="fa fa-trash" aria-hidden=true></i>
+                    </button>
+                </div>
+            {% empty %}
+                <p class="text-center"> There was some problem with your registeration, you do not have any pets added !</p>
+            {% endfor %}
+        </div>
+{% endblock %}

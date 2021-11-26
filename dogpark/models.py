@@ -248,8 +248,10 @@ class Dog(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     picture = models.ImageField(upload_to="dog_profile_picture", blank=True)
     def __str__(self):
-        return self.name + " is a " + self.breedname + " and is " + str(self.age) + " years old."
-    
+        if(self.gender == "M"):
+            return self.name + " is a " + self.breedname + " Male and is " + str(self.age) + " years old."
+        else:
+            return self.name + " is a " + self.breedname + " Female and is " + str(self.age) + " years old."
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='the_sender',on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='the_receiver', on_delete=models.CASCADE)

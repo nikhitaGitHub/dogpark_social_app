@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body_block %}
+{% include 'dogpark/navbar.html' %}
         <div class="container-fluid" id="people_list">
         {% for item in my_list %}
             <div id="u{{forloop.counter0}}" class="container">

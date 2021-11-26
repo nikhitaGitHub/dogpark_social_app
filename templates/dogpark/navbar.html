@@ -1,0 +1,16 @@
+<nav id="menu_bar" class="navbar navbar-dark navbar-expand-lg bg-primary">
+    <button id="nav-toggle" type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#content-navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="content-navbar-collapse">
+        <ul class="nav navbar-nav pull-left mr-auto">
+            <li><a class="nav-link" href="{% url 'dogpark:people' %}">Find People</a></li>
+            <li><a class="nav-link" href="{% url 'dogpark:see_friend_requests' %}">My friend requests</a></li>
+            <li><a class="nav-link" href="{% url 'dogpark:my_friends' %}">My friends</a></li>
+            <li><a class="nav-link" href="{% url 'dogpark:achievements' %}">My achievements</a></li>
+            <li id="Home" class="visible-phone visible-tablet"><a class="nav-link" href="{% url 'dogpark:index' %}">Home</a></li>
+            <li id="logout"><a class="nav-link" href="{% url 'dogpark:logout' %}">logout</a></li>
+        </ul>
+    </div>
+</nav>

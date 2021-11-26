@@ -1,4 +1,4 @@
-{% extends 'dogpark/base.html' %}
+{% extends 'dogpark/map.html' %}
 {% load static %}
 {% block title_block %}
     search people
@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block body_block %}
-        <div class="container-fluid" id="achievements">
+        {% include 'dogpark/navbar.html' %}
+        <div class="container" id="achievements">
             <p class="text-center">Your total points is {{total_points}}</p>
             <div class="row">
                 <div class="col-sm-4 col-md-4 col-lg-4">
