@@ -1,4 +1,4 @@
-{% extends 'dogpark/base.html' %}
+{% extends 'dogpark/map.html' %}
 {% load static %}
 {% block title_block %}
     search people
@@ -8,35 +8,37 @@
 {% endblock %}
 
 {% block body_block %}
-{% include 'dogpark/navbar.html' %}
-        <div class="container-fluid" id="people_list">
+        {% include 'dogpark/navbar.html' %}
+        <div class="container" id="people_list">
         {% for item in my_list %}
             <div id="u{{forloop.counter0}}" class="container">
-                <h5>Owner's name: {{item.0.first_name}} {{item.0.last_name}}</h5>
-                <p>I have {{item.2}} dogs</p>
+                <div class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
+                    <h5>Owner's name: {{item.0.first_name}} {{item.0.last_name}}</h5>
+                </div>
+                <div class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
+                    <p>I have {{item.2}} dogs</p>
+                </div>
                 <div class="row">
                 {% for dog in item.1 %}
-                    <div class="col-md-6 col-lg-4 col-sm-12">
+                    <div class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
                         {% if dog.picture %}
                             <img  id="dogPic{{forloop.counter0}}" src= "{{dog.picture.url}}" class="col-md-4 col-sm-12"/>
                         {% else %}
                             <img id="dogPic{{forloop.counter0}}" src={% static 'images/puppy.jpg' %} class="col-md-4 col-sm-12"/>
                         {% endif %}
-                        {% if dog.gender == 'M' %}
-                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Male {{ dog.breedname }} </p>
-                        {% else %}
-                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog.name }} is a {{ dog.age }} years old Female {{ dog.breedname }} </p>
-                        {% endif %}
+                            <p class="d-inline-block col-md-7 col-sm-12">{{ dog }} </p>
                     </div>
                 {% empty %}
 
-                {% endfor %} 
+                {% endfor %}
                 </div>
+                <div class="col-md-6 col-lg-4 col-sm-12 col-xs-12">
                     <button class="btn btn-primary" id="add_friend_btn{{forloop.counter0}}" data-uname={{item.0.username}}>Add Friend</button>
                     <p id="successful_request{{forloop.counter0}}" class="hidden">Friend request sent</p>
                     <i class="fa fa-check hidden" id="confirm{{forloop.counter0}}"></i>
-                    <hr/>               
                 </div>
+            </div>
+            <hr/>      
         {% empty %}
             <p>There is nothing to show here. Either you have already sent or received request or are friends already.</p>
         {% endfor %}

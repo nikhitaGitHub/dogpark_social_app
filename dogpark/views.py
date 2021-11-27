@@ -19,6 +19,8 @@ import os
 from django.forms import formset_factory
 from django.utils import timezone
 
+in_proximity_detected = False
+
 def find_checked_in_friends(u):
     checked_in_friends = []
     friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
@@ -35,7 +37,7 @@ def find_checked_in_friends(u):
     return checked_in_friends
         
 #Helper function 
-def helper_index(request, in_proximity):
+def helper_index(request):
     u = request.user
     context_dict = {}
     checked_in_friends = find_checked_in_friends(u)
@@ -46,31 +48,39 @@ def helper_index(request, in_proximity):
     context_dict["visitors"] = visitors     
     context_dict["my_checked_in_friends"] = checked_in_friends
     context_dict["u"] = u
-    context_dict['in_proximity'] = in_proximity
     return context_dict 
+
+def render_near_park(request):
+    context_dict = {}
+    try:
+        current = Owner.objects.get(user=u)
+        context_dict['checked_in'] = current.checked_in
+    except:
+        context_dict['checked_in'] = False
+    return render(request, 'dogpark/index_close.html', context=context_dict)
+
+def index_close(request):
+    global in_proximity_detected
+    close = request.POST.get('in_proximity')
+    if(close == "1" and in_proximity_detected == False):
+        in_proximity_detected = True
+        return HttpResponse(1)
+    elif(close == "0" and in_proximity_detected == True):
+        in_proximity_detected = False
+        return HttpResponse(1)
+    return HttpResponse(0)
 
 # Create your views here.
 def index(request):
-    in_proximity = False
+    global in_proximity_detected
     context_dict = {}
     checked_in_friends = []
     u = request.user
+    if in_proximity_detected == True:
+        return redirect(reverse('dogpark:render_near_park'))
     if not request.user.is_anonymous:
-        if request.method == 'POST' :
-            in_proximity = request.POST.get('in_proximity')
-            if(in_proximity == False):
-                context_dict = helper_index(request, False)
-            else:
-                try:
-                    current = Owner.objects.get(user=u)
-                    context_dict['checked_in'] = current.checked_in
-                except:
-                    context_dict['checked_in'] = False
-                context_dict['in_proximity'] = True 
-                return render(request, 'dogpark/index_close.html', context=context_dict)
-        else:
-            context_dict = helper_index(request, False)
-  
+        in_proximity_detected = False
+        context_dict = helper_index(request)
     return render(request, 'dogpark/index.html', context=context_dict)
 
 def user_login(request):

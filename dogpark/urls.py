@@ -5,6 +5,8 @@ app_name='dogpark'
 
 urlpatterns = [
     path('',views.index, name='index'),
+    path('near_park/',views.index_close, name='index_close'),
+    path('render_near_park/', views.render_near_park, name="render_near_park"),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('register/', views.register, name='register'),

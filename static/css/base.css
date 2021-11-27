@@ -15,11 +15,22 @@ body {
 	outline:none;
 }
 
+#checked_in_status {
+	color: #0a2351;
+}
+
+#checked_in_status button {
+	font-size: 20px;
+	height: inherit;
+	width: 100%;
+	padding: 5%;
+}
+
 #my_pet i {
 	font-size: 26px;
 }
 
-#greeting, #visitorInfo, #notification
+#greeting, #visitorInfo, #notification, #mypark #btns
 {
 	background-color:#F5F5DC;
 }
@@ -27,6 +38,20 @@ body {
 #btns {
 	background-color: #FFF5EE;
 }
+
+#mypark #btns button {
+	background-color: #FFDEAD;
+}
+
+#nav-toggle {
+	background-color: #0a2351;
+}
+
+#mypark #btns button {
+	padding: 10%;
+	margin: 3%;
+}
+
 .white-shade {
 	background-color: #F3EFAB;
 }
@@ -47,16 +72,12 @@ nav#menu_bar ul li {
 	padding-right:20px;
 }
 
-#checkIn{
-	width: 30%;
-}
-
-#mypark button {
-	font-size: 20px;
+div#people_list {
+    margin-top: 3%;
 }
 
 nav#menu_bar ul li a {
-	color: #FFFFFF;
+	color: #0a2351;
 	font-size: 16px;
 }
 
@@ -68,7 +89,18 @@ nav#menu_bar ul li a {
 	flex-direction: inherit;
 }
 
-nav#menu_bar ul li a:hover, #btns a:hover{
+#mypark #btns button:hover, #checked_in_status button:hover {
+	color: #007BFF;
+}
+
+nav#menu_bar ul li a:hover {
+	color: #007BFF;
+	height: inherit;
+	width: inherit;
+	text-decoration: none;
+}
+
+#btns a:hover {
 	color: #0a2351;
 	height: inherit;
 	width: inherit;
@@ -193,9 +225,6 @@ nav#menu_bar div {
 	font-weight: bolder;
 }
 
-#mypark a {
-	color: #FFFFFF;
-}
 
 #mypark a:hover {
 	text-decoration: transparent;
