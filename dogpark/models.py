@@ -9,16 +9,12 @@ class Owner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     num_dogs = models.IntegerField(default=0)
     checked_in = models.BooleanField(default=False)
-    def __str__(self):
-        #return self.user.first_name + 
-        return " is owner  "
     
 class Dog(models.Model):
     GENDER_CHOICES = (
         ('F', 'Female'),
         ('M', 'Male'),
     )
-    
     BREED_CHOICES = (
             (1,'Barbet'),
             (2, 'Bracco Italiano'), 
@@ -239,7 +235,6 @@ class Dog(models.Model):
             (216, 'Great Swiss Mountain Dog'),
             (217, 'Tibetan Mastiff')
             )
-    
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     breed = models.IntegerField(choices=BREED_CHOICES, default=1) 
     breedname = models.CharField(max_length=charLen256)
@@ -252,6 +247,7 @@ class Dog(models.Model):
             return self.name + " is a " + self.breedname + " Male and is " + str(self.age) + " years old."
         else:
             return self.name + " is a " + self.breedname + " Female and is " + str(self.age) + " years old."
+
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='the_sender',on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='the_receiver', on_delete=models.CASCADE)

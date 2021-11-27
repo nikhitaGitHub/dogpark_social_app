@@ -10,6 +10,7 @@
 {% block body_block %}
 {% include 'dogpark/navbar.html' %}
         <div class="container" id="my_pet">
+            <i class="fas fa-plus" aria-hidden=true id="add_pet"></i>
             {% for item in my_pets %}
                 <div class="row col-xs-12 col-sm-12">
                     <p>{{item}}</p>

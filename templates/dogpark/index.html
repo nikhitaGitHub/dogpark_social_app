@@ -19,22 +19,20 @@ dogpark
         <div class="d-flex flex-row justify-content-center align-content-center" id="visitorInfo">
             <h5 class="col-sm-12 col-md-12 col-lg-12 text-center" >There are {{visitors}} active dogs at the park!</h5>
         </div>
-        <div class="d-flex flex-row justify-content-center text-center" id="notification">   
+        <div class=" text-center" id="notification">   
                 {% if my_checked_in_friends %}
                     {% if my_checked_in_friends|length == 1 %}
-                        <h5>Your friend&#160</h5>
-                        <h5>{{my_checked_in_friends.0.first_name}} {{my_checked_in_friends.0.last_name}}</h5>
-                        <h5>&#160is currently playing</h5>
+                        <h5>Your friend&#160{{my_checked_in_friends.0.first_name}} {{my_checked_in_friends.0.last_name}}&#160is currently playing</h5>
                     {% else %}
-                        {% for item in my_checked_in_friends %}
-                            <h5>Your friends&#160</h5>
+                        <h5>Your friends&#160</h5>
+                        {% for item in my_checked_in_friends %}    
                             {% if forloop.last %}
                                 <h5>and&#160{{item.first_name}} {{item.last_name}}</h5>
                             {% else %}
-                                <h5>&#160{{item.first_name}} {{item.last_name}}&#44&#160</h5>
+                                <h5>{{item.first_name}} {{item.last_name}}&#44&#160</h5>
                             {% endif %}
                         {% endfor %}
-                        <h5>&#160are currently playing/h5>
+                        <h5>&#160are currently playing</h5>
                     {% endif %}
                 {% else %}
                     <h5>None of your friends are at the park at the moment</h5>

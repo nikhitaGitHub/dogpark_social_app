@@ -161,13 +161,13 @@ nav#menu_bar div {
 	margin-left: 20px;
 }
 
-#friend_list img {
-	width: 25%;
-	height: inherit;
-}
-
 #friend_request_list [id^="req"] .row div {
 	height: 50%;
+}
+
+#add_pet {
+	font-size:28px;
+	float: right;
 }
 
 #friend_request_list [id^="friends"] {
@@ -390,4 +390,21 @@ i.fa.fa-star-o {
 
 .modal-body {
 	text-align: center;
+}
+
+.modal-body div {
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.modal-body i {
+	font-size: xx-large;
+}
+
+.modal-body label, .modal-body input {
+	margin-left: 48%;
+}
+
+#notification h5 {
+	display: inline-block;
 }
