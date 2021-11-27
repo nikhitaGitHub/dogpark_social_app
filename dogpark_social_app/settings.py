@@ -16,6 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = STATIC_DIR
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 # Quick-start development settings - unsuitable for production
