@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
-
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dogpark',
-    'crispy_forms'
+    'crispy_forms',
+    'pwa'
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,36 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 LOGIN_URL =  'dogpark:login'
+
+PWA_APP_NAME = "DogPark Goers"
+PWA_APP_DESCRIPTION = "PWA for PGT dissertation"
+PWA_APP_THEME_COLOR = "#000000"
+PWA_APP_BACKGROUND_COLOR="#ffffff"
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': 'static/images/icon-160-160.png',
+        'sizes': '160x160'
+    }
+]
+
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': 'static/images/icon-160-160.png',
+        'sizes': '160x160'
+    }
+]
+
+PWA_APP_SPLASH_SCREEN =[
+    {
+        'src': 'static/images/icon.png',
+        'media': '(device-width: 320px) and (device:height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
