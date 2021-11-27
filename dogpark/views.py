@@ -197,9 +197,9 @@ def my_pet(request):
         return render(request, 'dogpark/index.html', context=context_dict)
     return render(request, 'dogpark/my_pet.html', context=context_dict)
 
-@login_required
-def park_events(request):
-    if request.method == "GET":
+class park_events(View):
+    @method_decorator(login_required)
+    def get(self, request):
         context_dict = {}
         eventslist = []
         try:
@@ -212,10 +212,8 @@ def park_events(request):
         except Events.DoesNotExist:
             events = None
         if events == None:
-            return render(request, 'dogpark/mypark.html', context=context_dict)
+            return render(request, 'dogpark/index_close.html', context=context_dict)
         return render(request, 'dogpark/park_events.html', context=context_dict)
-    else:
-        return render(request, 'dogpark/mypark.html')
 
 @login_required
 def park_goals(request):
@@ -236,7 +234,7 @@ def park_goals(request):
     except Goals.DoesNotExist:
         goals = None
     if goals == None:
-        return render(request, 'dogpark/mypark.html', context=context_dict)
+        return render(request, 'dogpark/index_close.html', context=context_dict)
     return render(request, 'dogpark/park_goals.html', context=context_dict)
 
 @login_required

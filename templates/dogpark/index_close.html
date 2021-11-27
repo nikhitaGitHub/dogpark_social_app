@@ -25,8 +25,8 @@ dogpark
         {% endif %}
         <div class="row" id="btns">
             <div class="col-sm-12 col-md-12 col-lg-12 text-center">
-                <button class="btn d-inline-block">Park Events</button>
-                <button class="btn d-inline-block">Park Goals</button>
+                <a class="btn d-inline-block" id="park-events"  href="{% url 'dogpark:park_events' %}">Park Events</a>
+                <a class="btn d-inline-block" id="park-goals" href="{% url 'dogpark:park_goals' %}">Park Goals</a>
             </div>
         </div>
         <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">

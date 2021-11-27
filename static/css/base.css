@@ -39,7 +39,7 @@ body {
 	background-color: #FFF5EE;
 }
 
-#mypark #btns button {
+#mypark #btns a {
 	background-color: #FFDEAD;
 }
 
@@ -47,8 +47,8 @@ body {
 	background-color: #0a2351;
 }
 
-#mypark #btns button {
-	padding: 10%;
+#mypark #btns a {
+	padding: 5%;
 	margin: 3%;
 }
 
@@ -82,14 +82,14 @@ nav#menu_bar ul li a {
 }
 
 #btns div {
-	padding: 20px;
+	padding: 5%;
 }
 
 #sub-menu {
 	flex-direction: inherit;
 }
 
-#mypark #btns button:hover, #checked_in_status button:hover {
+#mypark #btns a:hover, #checked_in_status button:hover {
 	color: #007BFF;
 }
 
@@ -100,10 +100,15 @@ nav#menu_bar ul li a:hover {
 	text-decoration: none;
 }
 
-#btns a:hover {
+#greet_notify_visitinfo #btns a:hover {
 	color: #0a2351;
 	height: inherit;
 	width: inherit;
+	text-decoration: none;
+}
+
+#mypark #btns a:hover {
+	color: #007BFF;
 	text-decoration: none;
 }
 
@@ -137,7 +142,7 @@ nav#menu_bar div {
 }
 
 [id$="gender"], [id$="breed"]{
-	width: 60%;
+	width: 80%;
 }
 
 [id^="accept_friend_btn"] {
@@ -253,7 +258,7 @@ form#register_form input {
     margin: 0 auto;
     border: 2px solid #007BFF;
     border-radius: 5px;
-	width: 60%;
+	width: 80%;
 	height: 35px;
 }
 
@@ -282,7 +287,7 @@ form#register_form input.btn {
 }
 
 #id_num_dogs {
-	width: 60%;
+	width: 80%;
 }
 
 form#register_form p {
@@ -306,14 +311,13 @@ div#prof div label {
 }
 
 label[for=id_num_dogs] {
-	width: 60% !important; 
+	width: 80% !important; 
 }
 
 #prof, #userinfo {
 	margin: 0 auto;
 	text-align: center;
 	padding: 5px;
-	border: 1px solid #007BFF;
 	margin-bottom: 20px;
 }
 
@@ -330,9 +334,17 @@ label[for=id_num_dogs] {
 	width: 20%;
 }
 
+
 @media only screen and (max-width: 768px) {
 	[id^="dogPic"] {
 		width: 30%;
+		height: 50%;
+	}
+}
+
+@media only screen and (max-width: 576px) {
+	[id^="dog"] {
+		width: 65%;
 		height: 50%;
 	}
 }

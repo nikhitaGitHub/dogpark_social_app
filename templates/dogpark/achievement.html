@@ -12,7 +12,7 @@
         <div class="container" id="achievements">
             <p class="text-center">Your total points is {{total_points}}</p>
             <div class="row">
-                <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="col-4">
                     <p class="desc">Goal</p>
                     {% for item in achievements %}
                         <div id="g{{forloop.counter0}}">
@@ -20,15 +20,15 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="col-sm-4 cold-md-4 col-lg-4">
-                    <p class="desc">Points earned</p>
+                <div class="col-4">
+                    <p class="desc">Points</p>
                     {% for item in achievements %}
                         <div id="p{{forloop.counter0}}">
                             <p>{{item.goal.points_earned}}</p>
                         </div>
                     {% endfor %}
                 </div>
-                <div class="col-sm-4 cold-md-4 col-lg-4">
+                <div class="col-4">
                     <p class="desc">Date</p>
                     {% for item in achievements %}
                         <div id="d{{forloop.counter0}}">
