@@ -324,4 +324,22 @@ $(document).ready(function() {
             }); 
     });
 
+    $("#checkIn").click(function(index, elm) {
+            var url = '/dogpark/check_in/';
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                    url:url,
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken
+                    },
+                    success: function(json) {
+                            $('#checkOut').show();
+                            $('#checkIn').hide();
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status+ ": "+xhr.responseText)
+                    }
+                });
+        });
 });
