@@ -52,6 +52,7 @@ def helper_index(request):
 
 def render_near_park(request):
     context_dict = {}
+    u = request.user
     try:
         current = Owner.objects.get(user=u)
         context_dict['checked_in'] = current.checked_in
