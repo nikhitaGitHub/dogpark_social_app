@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'var','static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -28,7 +28,7 @@ SECRET_KEY = '%@&p5xk5_7v2lv-by4bewa9diskwj+27)mthd!z0e_lob8zzy1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["nameless-sea-67566.herokuapp.com"]
+ALLOWED_HOSTS = ["nameless-sea-67566.herokuapp.com", "localhost"]
 
 
 # Application definition
