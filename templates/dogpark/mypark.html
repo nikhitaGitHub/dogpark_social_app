@@ -1,7 +1,7 @@
 {% extends 'dogpark/map.html' %}
 {% load static %}
 {% block title_block %}
-    search people
+    My Park
 {% endblock %}
 
 {% block header_block %}
@@ -9,7 +9,7 @@
 
 {% block body_block %}
 {% include 'dogpark/navbar.html' %}
-    <div class="container" id="mypark">
+    <div class="container" id="park">
         <h5 class="text-center">Your dog park is Cessnock Pacific</h5>
         <div class="d-flex flex-row justify-content-center align-content-center" id="map">
             <div id="map_canvas" class="container"></div>

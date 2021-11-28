@@ -16,8 +16,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = STATIC_DIR
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'var','static')
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -143,21 +143,21 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': 'static/images/icon-160-160.png',
+        'src': '/static/images/icon-160-160.png',
         'sizes': '160x160'
     }
 ]
 
 PWA_APP_ICONS_APPLE = [
     {
-        'src': 'static/images/icon-160-160.png',
+        'src': '/static/images/icon-160-160.png',
         'sizes': '160x160'
     }
 ]
 
 PWA_APP_SPLASH_SCREEN =[
     {
-        'src': 'static/images/icon.png',
+        'src': '/static/images/icon.png',
         'media': '(device-width: 320px) and (device:height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]

@@ -19,10 +19,13 @@ from django.urls import include
 from dogpark import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 urlpatterns = [
     path('', views.index, name = 'index'),
     path('dogpark/', include('dogpark.urls')),
     path('', include('pwa.urls')),
+    #path('favicon.ico/',RedirectView.as_view(url=staticfiles_storage.url('images/favicon.ico'))),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

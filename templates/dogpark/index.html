@@ -22,14 +22,14 @@ dogpark
         <div class=" text-center" id="notification">   
                 {% if my_checked_in_friends %}
                     {% if my_checked_in_friends|length == 1 %}
-                        <h5>Your friend&#160{{my_checked_in_friends.0.first_name}} {{my_checked_in_friends.0.last_name}}&#160is currently playing</h5>
+                        <h5>Your friend&#160{{my_checked_in_friends.0.first_name}}&#160is currently playing</h5>
                     {% else %}
                         <h5>Your friends&#160</h5>
                         {% for item in my_checked_in_friends %}    
                             {% if forloop.last %}
-                                <h5>and&#160{{item.first_name}} {{item.last_name}}</h5>
+                                <h5>and&#160{{item.first_name}}</h5>
                             {% else %}
-                                <h5>{{item.first_name}} {{item.last_name}}&#44&#160</h5>
+                                <h5>{{item.first_name}}&#44&#160</h5>
                             {% endif %}
                         {% endfor %}
                         <h5>&#160are currently playing</h5>

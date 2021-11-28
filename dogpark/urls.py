@@ -1,6 +1,7 @@
 from django.urls import path
 from dogpark import views
-
+from django.conf.urls import url
+from django.views.generic.base import RedirectView
 app_name='dogpark'
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     path('check_out/', views.check_out.as_view(), name="check_out"),
     path('rating/', views.rating, name="rating"),
     path('my_pet/', views.my_pet, name="my_pet")
+    #url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico'))
 ]
