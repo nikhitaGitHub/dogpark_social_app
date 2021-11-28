@@ -222,8 +222,8 @@ nav#menu_bar div {
 }
 
 #mypark #img_logo {
-	width: 100%;
-	height:auto;
+    width: 100%;
+    min-height:450px;
 }
 
 #visitorInfo {
