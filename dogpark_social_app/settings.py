@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["nameless-sea-67566.herokuapp.com", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+    'django_loaddata_stdin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
