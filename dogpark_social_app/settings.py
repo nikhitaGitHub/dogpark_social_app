@@ -28,7 +28,7 @@ SECRET_KEY = '%@&p5xk5_7v2lv-by4bewa9diskwj+27)mthd!z0e_lob8zzy1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["https://pgtdissertation.pythonanywhere.com/"]
+ALLOWED_HOSTS = ["pgtdissertation.pythonanywhere.com"]
 
 
 # Application definition
