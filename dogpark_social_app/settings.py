@@ -22,11 +22,15 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+key = None
+with open('secret.key') as f:
+    key = f.read().strip()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%@&p5xk5_7v2lv-by4bewa9diskwj+27)mthd!z0e_lob8zzy1'
+SECRET_KEY = key 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["pgtdissertation.pythonanywhere.com"]
 
