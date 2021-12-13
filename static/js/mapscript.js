@@ -1,4 +1,4 @@
-
+//Required for sending POST request
 function getCookie(name) {
     var cookieValue = null;
     if(document.cookie && document.cookie != "") {
@@ -13,7 +13,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
+//To calculat if in 1km vicinity of park, this function and then send POST to one url to render two different views
 function calculateDistance(position) {
     var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     var target = new google.maps.LatLng(55.85365783555865, -4.288739944549508);
@@ -60,7 +60,7 @@ function calculateDistance(position) {
         });
     }
 }
-
+//Keep watch on the location coordinates for change
 function initialize() {
   var map;
   var currentLocation = {};
@@ -77,12 +77,12 @@ function initialize() {
     window.w = navigator.geolocation.watchPosition(calculateDistance);
   }        
 }
-
+//Function invoked on window load
 function loadTheMap() {
     var script=document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC_Ii8L8wy40S8pB-eUBg13MlIOGYHXx6Y&libraries=geometry&callback=initialize';
     document.body.appendChild(script);
 };
-
+//Insert the map API script right after window loads
 window.onload = loadTheMap;

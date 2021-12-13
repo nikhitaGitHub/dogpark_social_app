@@ -3,7 +3,7 @@ from dogpark import views
 from django.conf.urls import url
 from django.views.generic.base import RedirectView
 app_name='dogpark'
-
+#This variable holds a list of paths that is storing a mapping of the URL (1st param) to view (second param) and name serves as an id
 urlpatterns = [
     path('',views.index, name='index'),
     path('near_park/',views.index_close, name='index_close'),

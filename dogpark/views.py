@@ -21,8 +21,10 @@ from django.utils import timezone
 
 in_proximity_detected = False
 
+#helper function to find list of friendsly only who are checked in
 def find_checked_in_friends(u):
     checked_in_friends = []
+    #fetch from DB filetering results
     friends = Friendship.objects.filter(Q(from_friend = u) | Q(to_friend = u))
     for x in friends.iterator():
         if x.from_friend == u:
@@ -30,6 +32,7 @@ def find_checked_in_friends(u):
         else:
             ci_u = x.from_friend
         try:
+            # Query DB to fetch a value using Complex queries
             if Owner.objects.get(Q(user=ci_u) & Q(checked_in=True)):
                 checked_in_friends.append(ci_u)
         except Owner.DoesNotExist:
@@ -42,6 +45,7 @@ def helper_index(request):
     context_dict = {}
     checked_in_friends = find_checked_in_friends(u)
     try:
+        # Fetch everything but the current user
         visitors = Owner.objects.exclude(user=u).filter(checked_in=True).count()
     except:
         visitors = 0  
@@ -50,6 +54,7 @@ def helper_index(request):
     context_dict["u"] = u
     return context_dict 
 
+# to handle HP2 on proximity to park, executes upon location chagnge
 def render_near_park(request):
     context_dict = {}
     u = request.user
@@ -60,6 +65,7 @@ def render_near_park(request):
         context_dict['checked_in'] = False
     return render(request, 'dogpark/index_close.html', context=context_dict)
 
+#Same executes upon POST request 
 def index_close(request):
     global in_proximity_detected
     close = request.POST.get('in_proximity')
@@ -71,12 +77,13 @@ def index_close(request):
         return HttpResponse(1)
     return HttpResponse(0)
 
-# Create your views here.
+#HP1 when user is at home
 def index(request):
     global in_proximity_detected
     context_dict = {}
     checked_in_friends = []
     u = request.user
+    #Variable to detect if user is still close to the park
     if in_proximity_detected == True:
         return redirect(reverse('dogpark:render_near_park'))
     if not request.user.is_anonymous:
@@ -84,6 +91,7 @@ def index(request):
         context_dict = helper_index(request)
     return render(request, 'dogpark/index.html', context=context_dict)
 
+#Logs a user in, HttpResponse for error handling
 def user_login(request):
     if request.method=='POST':
         username = request.POST.get('username')
@@ -101,11 +109,14 @@ def user_login(request):
     else:
         return render(request, 'dogpark/index.html')
  
+#logs a user out
 @login_required   
 def user_logout(request):
     logout(request)
+    #re route to the homepage upon success
     return redirect(reverse('dogpark:index'))
 
+#Fetch as many forms as the number of dogs
 def get_dog_form(request, num):
     formset = formset_factory(UserProfileForm, extra=num)
     data = {
@@ -119,6 +130,7 @@ def get_dog_form(request, num):
     template =render_to_string('forms.html', context=context)# render_to_string('forms.html', context=context)
     return JsonResponse({"form": template})
 
+#User Registeration into Dog and Owner Model 
 def register(request):
     registered = False
     profile_form = []
@@ -163,29 +175,39 @@ def register(request):
         
     return render(request, 'dogpark/register.html', context=context_dict)
 
+#Decorator mandating login
 @login_required
+# Find active users to view and potenitally friend
 def people(request):
     u = request.user
     num_dogs = []
     my_list = []
+    # Do not fetch current friends of the user
     friends = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
+    #Do not fetch current active freind requests with the user
     friend_req = FriendRequest.objects.filter(Q(sender=u) | Q(receiver=u))
     user_list = User.objects.exclude(username=get_user(request))
+    # Iterate over all querys fetched so far
     for x in friends.iterator():
+        #Fruther filter out those with whom user already has a freind request active
         user_list = user_list.filter(~Q(id=x.from_friend.id) & ~Q(id=x.to_friend.id))
     for x in friend_req.iterator():
         user_list = user_list.filter(~Q(id=x.sender.id) & ~Q(id=x.receiver.id))
     for x in user_list:
+        #Fetch pet details of the current user 
         dog_list = Dog.objects.filter(owner=x)
         my_list.append((x, dog_list, len(dog_list)))
     context_dict = {}
+    #Display dog details of every user on the UI
     context_dict['my_list'] = my_list
     return render(request, 'dogpark/people.html', context=context_dict)
 
+#Render my park information , GET request
 @login_required
 def mypark(request):
     return render(request, 'dogpark/mypark.html')
 
+#Fetch my pet information and display, simple GET request
 @login_required
 def my_pet(request):
     context_dict = {}
@@ -199,12 +221,15 @@ def my_pet(request):
     return render(request, 'dogpark/my_pet.html', context=context_dict)
 
 class park_events(View):
+    #Decorator specifying login is mandatory for this to execute
     @method_decorator(login_required)
+    #Fetch the park events in DB to display, just a View request
     def get(self, request):
         context_dict = {}
         eventslist = []
         try:
             events=Events.objects.all()
+            #Find the events user intends to attend and filter them to display as 'attending'
             myevents = MyEvents.objects.filter(owner=request.user)
             for x in myevents.iterator():
                 eventslist.append(getattr(x, 'myevent'))
@@ -216,6 +241,7 @@ class park_events(View):
             return render(request, 'dogpark/index_close.html', context=context_dict)
         return render(request, 'dogpark/park_events.html', context=context_dict)
 
+#Decorator specifying login is mandatory for this to execute
 @login_required
 def park_goals(request):
     context_dict = {}
@@ -228,6 +254,7 @@ def park_goals(request):
             mygoals.append(getattr(x, 'goal'))   
         a = Achievement.objects.filter(owner=request.user)
         for x in a:
+            #Fetch achievements and reset to display
             my_achievements.append(getattr(x, 'goal'))
         context_dict['goals'] = goals
         context_dict['mygoal']  = mygoals
@@ -238,6 +265,7 @@ def park_goals(request):
         return render(request, 'dogpark/index_close.html', context=context_dict)
     return render(request, 'dogpark/park_goals.html', context=context_dict)
 
+#Add an event to the attending list
 @login_required
 def attend_event(request):
     context_dict = {}
@@ -252,7 +280,8 @@ def attend_event(request):
     if e == None or me == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})
-    
+
+#Delete and event from the attendind list
 @login_required
 def decline_event(request):
     context_dict = {}
@@ -267,7 +296,8 @@ def decline_event(request):
     if e == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})
-    
+
+#Add a goal to start
 @login_required
 def add_goal(request):
     context_dict = {}
@@ -281,7 +311,8 @@ def add_goal(request):
     if e == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})    
-    
+
+#Remove a gaol from list of goals to undertake
 @login_required
 def remove_goal(request):
     context_dict = {}
@@ -296,7 +327,8 @@ def remove_goal(request):
     if e == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})
- 
+
+#Store user provided rating
 @login_required
 def rating(request):
     rating = request.POST.get('rating')
@@ -307,6 +339,7 @@ def rating(request):
         print("DB no exist")        
     return JsonResponse({'response': 1})
 
+#Mark a goal finished hence, adding to achievment
 @login_required
 def finish_goal(request):
     context_dict = {}
@@ -321,7 +354,8 @@ def finish_goal(request):
     if e == None:
         return JsonResponse(data)
     return JsonResponse({'response': 1})  
- 
+
+#Store a list of all completed goals with date to store history and pointes earned
 @login_required
 def achievements(request):
     context_dict = {}
@@ -339,6 +373,7 @@ def achievements(request):
         return render(request, 'dogpark/index.html', context=context_dict)
     return render(request, 'dogpark/achievement.html', context=context_dict)
         
+# Has method to view all received or active friend requests
 class seeFriendRequests(View):
     @method_decorator(login_required)
     def get(self, request):
@@ -354,6 +389,7 @@ class seeFriendRequests(View):
                 if not already_friends:
                     my_requests = FriendRequest.objects.filter(receiver=request.user)
                 else:
+                    #If the user is already friends now with them, either remove from friend request table or do not fetch to show
                     for x in already_friends.iterator():
                         my_requests = FriendRequest.objects.filter(Q(receiver=request.user) & (~Q(sender_id=x.from_friend_id) | ~Q(sender_id=x.to_friend_id)))
             except ObjectDoesNotExist:
@@ -373,7 +409,8 @@ class seeFriendRequests(View):
             context_dict['incoming_requests'] = my_list
             context_dict['request_exists'] = request_exists
             return render(request, 'dogpark/see_friend_requests.html', context=context_dict)
-    
+
+#Holds list of all friends to display
 class myFriends(View):
     @method_decorator(login_required)
     def get(self, request):
@@ -381,9 +418,11 @@ class myFriends(View):
         dog_list = []
         u = get_user(request)
         try:
+            #Freindship can be 2 way, so show both
             friendship = Friendship.objects.filter(Q(from_friend=u) | Q(to_friend=u))
             for friend in friendship:
                 if friend.from_friend == u:
+                    #retrive corresponding friend's dog details
                     dog_list.append((Dog.objects.filter(owner=friend.to_friend), friend.to_friend))
                 else:
                     dog_list.append((Dog.objects.filter(owner=friend.from_friend), friend.from_friend))
@@ -394,7 +433,8 @@ class myFriends(View):
         context_dict['friends'] = friendship
         context_dict['dogs'] = dog_list
         return render(request,  'dogpark/my_friends.html', context=context_dict)
-         
+
+#store in thd DB sent friend request
 class SendFriendRequest(View):
     @method_decorator(login_required)
     def post(self,request):
@@ -407,7 +447,8 @@ class SendFriendRequest(View):
         except ValueError:
             return JsonResponse(data)
         return JsonResponse({'response': 1})
-    
+
+#Store ACcepted freind requests taht is friend a person    
 class AcceptRequests(View):
     @method_decorator(login_required)
     def post(self,request):
@@ -417,6 +458,7 @@ class AcceptRequests(View):
             from_friend = request.user
             to_friend = User.objects.get(username=uname)
             friend, created = Friendship.objects.get_or_create(from_friend=from_friend, to_friend=to_friend)
+            #Since accepted so delete from friend reqeust table
             FriendRequest.objects.get(Q(sender=to_friend) & Q(receiver=from_friend)).delete()
             if created:
                 return JsonResponse({'response': 1})
@@ -424,6 +466,7 @@ class AcceptRequests(View):
             return JsonResponse(data)
         return JsonResponse({'response': 1})
     
+# Check in a user by setting checked in attribute to true
 class check_in(View):
     @method_decorator(login_required)
     def post(self, request):
@@ -437,6 +480,7 @@ class check_in(View):
             return JsonResponse({'response': -1})
         return JsonResponse({'response': 1})
 
+#Check out a user by setting checked in attribute to false
 class check_out(View):
     @method_decorator(login_required)
     def post(self, request):

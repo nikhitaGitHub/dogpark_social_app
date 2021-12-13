@@ -5,16 +5,19 @@ from dogpark.constants import charLen256, charLen100
 from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 
+#Table to hold owner information
 class Owner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     num_dogs = models.IntegerField(default=0)
     checked_in = models.BooleanField(default=False)
-    
+
+#Table to hold dog information
 class Dog(models.Model):
     GENDER_CHOICES = (
         ('F', 'Female'),
         ('M', 'Male'),
     )
+    #dog breeds from keneel club
     BREED_CHOICES = (
             (1,'Barbet'),
             (2, 'Bracco Italiano'), 
@@ -247,7 +250,7 @@ class Dog(models.Model):
             return self.name + " is a " + self.breedname + " Male and is " + str(self.age) + " years old."
         else:
             return self.name + " is a " + self.breedname + " Female and is " + str(self.age) + " years old."
-
+#Table to hold Friend Request information
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='the_sender',on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='the_receiver', on_delete=models.CASCADE)
@@ -256,7 +259,7 @@ class FriendRequest(models.Model):
     
     class Meta:
         unique_together = (('sender', 'receiver'),)
-    
+#Table to hold Friendship information
 class Friendship(models.Model):
     from_friend = models.ForeignKey(User, related_name="from_friend", on_delete=models.CASCADE)
     to_friend= models.ForeignKey(User, on_delete=models.CASCADE)
@@ -265,25 +268,29 @@ class Friendship(models.Model):
     
     class Meta:
         unique_together = (('from_friend', 'to_friend'),)
-        
+#Table to hold Events information        
 class Events(models.Model):
     name = models.CharField(max_length=charLen256)
     date = models.DateField(default=datetime.date.today, blank=True, null=True)
     time = models.TimeField(auto_now=False, auto_now_add=False)
-    
+
+#Table to hold Goals information
 class Goals(models.Model):
     description = models.CharField(max_length=charLen256)
     points_earned = models.IntegerField(default=0)
 
+#Table to add goal to my goal for a user
 class MyGoal(models.Model):
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+#Table to mark a goal complete and so achieve it
 class Achievement(models.Model):
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
     created = models.DateField(default=datetime.date.today)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+#Table to hold rating information
 class Ratings(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0, 
@@ -293,6 +300,7 @@ class Ratings(models.Model):
                                 ])
     created = models.DateField(default=datetime.date.today)
 
+#Table to store events a user wants to attend
 class MyEvents(models.Model):
     myevent = models.ForeignKey(Events, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
